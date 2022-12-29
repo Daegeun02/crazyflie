@@ -1,61 +1,66 @@
-## This file contains functions that transform coordinate
-from numpy import cos, sin, sqrt
-from numpy import arctan2, arcsin
+from numpy        import arctan2, arccos, rad2deg
+from numpy        import cos, sin, deg2rad
+from numpy.linalg import norm
 
 
 
-def euler2quatn(euler):
-    ## numpy function only get [rad] as input of function
-    ## r: roll, p: pitch, y: yaw
-    r, p, y = euler
+def _thrust_to_RPY( acc_cmd, command ):
+    """
+    this function translate acc_cmd in NED coordinate,
+    to drone's body coordinate roll, pitch, yaw, acc
+
+    command:
+    1. roll
+    2. pitch
+    3. yaw
+    4. acc
+    """
+    ## unpack acceleration command
+    aN, aE, aD = acc_cmd    ## NED coodinate
+
+    ## acceleration to z-direction in drone's coordinate
+    acc_str = norm( acc_cmd )   ## acceleration strength
+    command[3] = acc_str
+
+    ## calculate roll, pitch, yaw
+    ## 1. roll
+    command[0] = 0      ## this is contraint, [deg]
+    ## 2. pitch
+    cp = (-1) * aD / acc_str
+    pitch_in_rad = arccos( cp )             ## [rad]
+    command[1] = rad2deg( pitch_in_rad )    ## [deg]
+    ## 3. yaw
+    yaw_in_rad = arctan2( aE, aN )          ## [rad]
+    command[2] = rad2deg( yaw_in_rad )      ## [deg]
+
+
+def _thrust_to_NED( command ):
+    """
+    this function translate command about drone's body coordinate,
+    to NED coordinate
+
+    command:
+    1. roll
+    2. pitch
+    3. yaw
+    4. acc
+    """
+    ## unpack command
+    roll, pitch, yaw, acc_str = command     ## [deg]
+
+    ## deg to rad
+    roll  = deg2rad( roll )                   ## [rad]
+    pitch = deg2rad( pitch )                  ## [rad]
+    yaw   = deg2rad( yaw )                    ## [rad]
 
     ## basic
-    r, p, y = r/2, p/2, y/2         ## conversion
-    cr, sr = cos(r), sin(r)
-    cp, sp = cos(p), sin(p)
-    cy, sy = cos(y), sin(y)
+    cp, sp = cos( pitch ), sin( pitch )
+    cy, sy = cos( yaw )  , sin( yaw )
 
-    ## quaternions
-    q0 = cy*cp*cr + sy*sp*sr
-    q1 = cy*cp*sr - sy*sp*cr
-    q2 = cy*sp*cr - sy*cp*sr
-    q3 = sy*cp*cr - cy*sp*sr
-
-    ## normalize
-    Q = sqrt(q0**2 + q1**2 + q2**2 + q3**3)
-    q0 /= Q
-    q1 /= Q
-    q2 /= Q
-    q3 /= Q
-
-    ## return
-    return q0, q1, q2, q3
-
-
-def quatn2euler(quatn):
-    ## it's complicate
-    q0, q1, q2, q3 = quatn
-
-    ## 1. roll
-    ry = q0 * q1 + q2 * q3
-    rx = q0**2 + q3**2 - 0.5
-
-    roll = arctan2( ry, rx )
-
-    ## 2. pitch
-    pa = 2 * (q0 * q2 - q1 * q3)
-
-    pitch = arcsin( pa )
-
-    ## 3. yaw
-    yy = q0 * q3 + q1 * q2
-    yx = q0**2 + q1**2 - 0.5
-
-    yaw = arctan2( yy, yx )
+    ## calculate NED command
+    aN = (-1) * acc_str * sp * cy
+    aE = (-1) * acc_str * sp * sy
+    aD = (-1) * acc_str * cp
 
     ## return 
-    return roll, pitch, yaw
-
-def NED2euler(NED):
-    ## zz
-    N, E, D = NED
+    return aN, aE, aD
