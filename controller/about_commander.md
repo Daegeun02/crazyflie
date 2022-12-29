@@ -10,7 +10,7 @@ It has three functions.
 
 ## init_send_setpoint
 This function initialize crazyflie's send_setpoint function.<br>
-Just insert $[0,\0,\0,\0]$ as command.
+Just insert $[0,\ 0,\ 0,\ 0]$ as command.
 
 ## send_setpoint
 You can use this function as crazyflie's send_setpoint function.<br>
