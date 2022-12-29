@@ -20,7 +20,7 @@ but crazyflie's get __command__ like $[roll,\ pitch,\ yaw,\ thrust]$.<br>
 Because we thought it is more convenient for user who use our send_setpoint function.<br>
 Thanks for __optimus_prime.py__ we can translate $[aN,\ aE,\ aD]$ to $[roll,\ pitch,\ yaw,\ thrust]$.
 
-You can choose Hz of the feedback loop $1 \approx 10$ Hz and Hz of this function is limited in 10 Hz.<br>
+You can choose Hz of the feedback loop 1 ~ 10 Hz and Hz of this function is limited in 10 Hz.<br>
 
 Here's about feedback loop in function
 > To Be Continue..
