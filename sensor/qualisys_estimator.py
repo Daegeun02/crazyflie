@@ -1,11 +1,15 @@
 from threading import Thread
 
+from scipy.spatial.transform import Rotation
+
 import xml.etree.cElementTree as ET
 
 import qtm
 import asyncio
 
 from math import isnan
+
+send_full_pose = True
 
 
 
@@ -35,12 +39,12 @@ class QtmWrapper(Thread):
         await self._close()
 
     async def _connect(self):
+
         self.connection = await qtm.connect('127.0.0.1')
         
         if self.connection is None:
             print("Failed to connect")
             return
-
 
         params = await self.connection.get_parameters(parameters=['6d'])
         self.params = params
@@ -87,3 +91,19 @@ class QtmWrapper(Thread):
     async def _close(self):
         await self.connection.stream_frames_stop()
         self.connection.disconnect()
+
+
+def send_extpose_rot_matrix(cf, x, y, z, rot):
+    """
+    Send the current Crazyflie X, Y, Z position and attitude as a (3x3)
+    rotaton matrix. This is going to be forwarded to the Crazyflie's
+    position estimator.
+    """
+    quat = Rotation.from_matrix(rot).as_quat()
+
+    if send_full_pose:
+        cf.extpos.send_extpose(x, y, z, quat[0], quat[1], quat[2], quat[3])
+    else:
+        cf.extpos.send_extpos(x, y, z)
+
+    print(rot)

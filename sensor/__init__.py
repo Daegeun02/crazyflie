@@ -2,7 +2,7 @@
 
 from .sensor_setup           import *
 from .imu                    import IMU
-from .qualisys_estimator     import QtmWrapper
+from .qualisys_estimator     import QtmWrapper, send_extpose_rot_matrix
 
 
 
@@ -23,17 +23,23 @@ def start(scf):
     sensor.start_get_position()
     sensor.start_get_velocity()
     sensor.start_get_acc()
+    sensor.start_get_euler()
 
 
-# def start(scf):
+# def start(scf, qtm_wrapper):
 #     cf = scf.cf
 #     ## initialize sensor
-#     qtm_wrapper = QtmWrapper(scf.body_name)
+#     # qtm_wrapper = QtmWrapper(scf.body_name)
 #     sensor      = IMU(scf=scf)
 #     ## setup sensor
-#     setup(cf)           ## activate IMU
 #     qtm_wrapper.on_pose = lambda pose: send_extpose_rot_matrix(
 #         cf, pose[0], pose[1], pose[2], pose[3]
 #     )                   ## activate Qualisys bacon zz
+#     setup(cf)           ## activate IMU
 #     ## start sensor
+#     ## translation
+#     sensor.start_get_position()
+#     sensor.start_get_velocity()
 #     sensor.start_get_acc()
+#     ## rotation
+#     sensor.start_get_euler()
