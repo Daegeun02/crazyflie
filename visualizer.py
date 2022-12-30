@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from numpy import array
 
 
 
@@ -26,25 +27,25 @@ def visualize_acc(acc_rec, acc_ref, t):
 
     plt.show()
 
-def visualize_thrust(timestep, record, referen, thrust):
+def visualize_thrust(timestep, record, referen, thrust, alpha):
     plt.figure(figsize=(11,5), dpi=200)
 
     plt.subplot(121)
-    plt.plot(timestep, record, label="actual thrust")
-    plt.plot(timestep, referen, label="reference thrust")
+    plt.plot(timestep, record, label="actual acc")
+    plt.plot(timestep, referen, label="reference acc")
     plt.legend()
     plt.grid()
 
     plt.subplot(122)
     plt.plot(timestep, thrust, label="actual thrust")
-    plt.plot(timestep, referen, label="reference thrust")
+    plt.plot(timestep, array(referen) * alpha, label="reference thrust")
     plt.legend()
     plt.grid()
 
     plt.show()
 
 def visualize_state(pos, vel, acc, t):
-    plt.figure(figsize=(6,6), dpi=200)
+    plt.figure(figsize=(9,9), dpi=200)
 
     plt.subplot(331)
     plt.plot(t, pos[0,:], label="position X")
