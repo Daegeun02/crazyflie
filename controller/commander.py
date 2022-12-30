@@ -4,7 +4,7 @@ from time import sleep
 
 import copy
 
-from .acc_att_controller import _dot_thrust, _dot_thrust2, alpha, Kp
+from .acc_att_controller import _dot_thrust, alpha, Kp
 
 from filter import LPF
 from filter import EMAF
@@ -20,11 +20,9 @@ class Commander:
         self.emf = EMAF()._filter
         self.dt  = dt
 
-        self.thrust = 10001
+        self.thrust = alpha * 9.81
         self.record1 = []
         self.record2 = []
-
-        self.acc_pre = [0,0,9.8]
     
     def init_send_setpoint(self):
         ## commander
@@ -33,7 +31,7 @@ class Commander:
         commander.send_setpoint(0, 0, 0, 0)
 
 
-    def send_setpoint(self, cmd, n=10):
+    def send_setpoint(self, cmd, n):
         ## crazyflie
         cf = self.cf
         ## commander
@@ -44,12 +42,9 @@ class Commander:
         ## timestep
         dt = self.dt / n
         ## filter
-        _filter = self.emf
-
-        ## previous
-        acc_pre = self.acc_pre
-
-        ## current
+        # _filter = self.emf
+        # _filter = self.lpf
+        ## current state
         acc_cur = cf.acc
 
         ## controller input
@@ -57,26 +52,21 @@ class Commander:
 
         for _ in range(n):
             ## current state
-            acc_cur = _filter(cf.acc)
+            # acc_cur = _filter(cf.acc)
 
             ## closed loop
-            # self.thrust += _dot_thrust(acc_cmd, acc_cur)       ## integration
-            self.thrust += _dot_thrust2(acc_cmd, acc_cur, acc_pre, dt)       ## integration
+            self.thrust += _dot_thrust(acc_cmd, acc_cur)      ## integration
 
             ## cliping
             thrust = thrust_clip(self.thrust)
 
+            ## input
+            commander.send_setpoint(r_cmd, p_cmd, y_cmd, thrust)
+
             record1.append(acc_cur[2]) 
             record2.append(thrust)
 
-            ## input
-            # commander.send_setpoint(r_cmd, p_cmd, y_cmd, thrust)
-
-            acc_pre = array(acc_cur)
-
             sleep(dt)
-
-        self.acc_pre = array(acc_cur)
 
 
     def stop_setpoint(self):

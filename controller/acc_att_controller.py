@@ -3,8 +3,8 @@ from numpy.linalg import norm
 ## thrust factor constant
 alpha = (45000/9.81)
 ## PD loop constant
-Kp = 0.7 
-Kd = 0.1
+Kp = 0.3 
+# Kd = 0.1
 
 K_T = alpha * Kp
 
@@ -13,31 +13,33 @@ K_T = alpha * Kp
 def _dot_thrust(acc_cmd, acc_cur):
     ## difference
     dot_acc = acc_cmd - acc_cur[2]      ## temporary
+    # print('dot_acc', dot_acc)
+    # print('acc_cur', acc_cur)
     ## command
     dot_thr = K_T * dot_acc
     ## return
     return dot_thr
 
 
-def _dot_thrust2(acc_cmd, acc_cur, acc_pre, dt):
-    print(dt)
-    ## difference
-    del_acc = acc_cmd    - acc_cur[2]      ## temporary
-    print('acc_cmd', acc_cmd)
-    print('acc_cur', acc_cur)
-    print('acc_pre', acc_pre)
-    print("del_acc", del_acc)
-    dot_acc = (acc_cur[2] - acc_pre[2]) / dt
-    print("dot_acc", dot_acc)
+# def _dot_thrust2(acc_cmd, acc_cur, acc_pre, dt):
+#     print(dt)
+#     ## difference
+#     del_acc = acc_cmd    - acc_cur[2]      ## temporary
+#     print('acc_cmd', acc_cmd)
+#     print('acc_cur', acc_cur)
+#     print('acc_pre', acc_pre)
+#     print("del_acc", del_acc)
+#     dot_acc = (acc_cur[2] - acc_pre[2]) / dt
+#     print("dot_acc", dot_acc)
 
-    print('=' * 20)
-    ## command
-    dot_thr = 0
-    dot_thr += del_acc * Kp
-    dot_thr -= dot_acc * Kd
-    dot_thr *= alpha
-    ## return
-    return dot_thr
+#     print('=' * 20)
+#     ## command
+#     dot_thr = 0
+#     dot_thr += del_acc * Kp
+#     dot_thr -= dot_acc * Kd
+#     dot_thr *= alpha
+#     ## return
+#     return dot_thr
 
 
 class AccAttController:
