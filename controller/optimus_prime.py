@@ -6,7 +6,7 @@ from numpy        import sqrt
 
 def _thrust_to_RPY( acc_cmd, command ):
     """
-    this function translate acc_cmd in ENU coordinate,
+    this function translates acc_cmd in ENU coordinate,
     to drone's body coordinate roll, pitch, yaw, acc
 
     coordinate rotates in 3 -> 2 -> 1 order
