@@ -29,7 +29,7 @@ ${^{w}v_{E} \over \sqrt{^{w}v^{2}_{E}+^{w}v^{2}_{U}}}$<br>
 Third, rotate roll. In this time, you can imagine triangle like OEF in image above. It little complicate.. <br>
 In that triangle, $\angle FEO = {\pi \over 2}$ and $\angle FOE = - \phi$. So, you can get $\phi$ easily as we did in Second. Like this,
 
-$\phi = \arcsin -^{w}v_{N} \over \lVert v \rVert$<br>
+$\phi = \arcsin {-^{w}v_{N} \over \lVert v \rVert}$<br>
 
 This image is show what you did in this three step.
 ![optimus02](.././image/optimus02.png)
