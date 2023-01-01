@@ -1,61 +1,115 @@
-## This file contains functions that transform coordinate
-from numpy import cos, sin, sqrt
-from numpy import arctan2, arcsin
+from numpy        import arcsin, rad2deg
+from numpy        import cos, sin, deg2rad
+from numpy        import sqrt
 
 
 
-def euler2quatn(euler):
-    ## numpy function only get [rad] as input of function
-    ## r: roll, p: pitch, y: yaw
-    r, p, y = euler
+def _thrust_to_RPY( acc_cmd, command ):
+    """
+    this function translate acc_cmd in ENU coordinate,
+    to drone's body coordinate roll, pitch, yaw, acc
 
-    ## basic
-    r, p, y = r/2, p/2, y/2         ## conversion
-    cr, sr = cos(r), sin(r)
-    cp, sp = cos(p), sin(p)
-    cy, sy = cos(y), sin(y)
+    coordinate rotates in 3 -> 2 -> 1 order
 
-    ## quaternions
-    q0 = cy*cp*cr + sy*sp*sr
-    q1 = cy*cp*sr - sy*sp*cr
-    q2 = cy*sp*cr - sy*cp*sr
-    q3 = sy*cp*cr - cy*sp*sr
+    command:
+    1. roll
+    2. pitch
+    3. yaw
+    4. acc
+    """
+    ## unpack acceleration command
+    aE, aN, aU = acc_cmd        ## ENU coordinate
 
-    ## normalize
-    Q = sqrt(q0**2 + q1**2 + q2**2 + q3**3)
-    q0 /= Q
-    q1 /= Q
-    q2 /= Q
-    q3 /= Q
-
-    ## return
-    return q0, q1, q2, q3
-
-
-def quatn2euler(quatn):
-    ## it's complicate
-    q0, q1, q2, q3 = quatn
-
-    ## 1. roll
-    ry = q0 * q1 + q2 * q3
-    rx = q0**2 + q3**2 - 0.5
-
-    roll = arctan2( ry, rx )
+    ## acceleration to z-direction in drone's coordinate
+    ## 3. yaw
+    command[2] = 0              ## do not rotate,  [deg]
 
     ## 2. pitch
-    pa = 2 * (q0 * q2 - q1 * q3)
+    acc_str = sqrt( aE**2 + aU**2 )
+    if acc_str:
+        pitch_in_rad = arcsin( aE / acc_str )       ## [rad]
+    else:
+        pitch_in_rad = 0
+    command[1] = rad2deg( pitch_in_rad )        ## [deg]
 
-    pitch = arcsin( pa )
+    ## 1. roll
+    acc_str = sqrt( aN**2 + acc_str**2 )
+    if acc_str:
+        roll_in_rad = arcsin( -aN / acc_str )        ## [rad]
+    else:
+        roll_in_rad = 0
+    command[0] = rad2deg( roll_in_rad )          ## [deg]
 
-    ## 3. yaw
-    yy = q0 * q3 + q1 * q2
-    yx = q0**2 + q1**2 - 0.5
+    ## acc strength
+    command[3] = acc_str                        ## m/s^2
 
-    yaw = arctan2( yy, yx )
 
-    ## return 
-    return roll, pitch, yaw
+def _thrust_to_ENU( command, acc_cmd ):
+    """
+    this function translate command about drone's body coordinate,
+    to ENU coordinate
 
-def NED2euler(NED):
-    ## zz
-    N, E, D = NED
+    command:
+    1. roll
+    2. pitch
+    3. yaw
+    4. acc
+    """
+    ## unpack command
+    roll, pitch, yaw, acc_str = command       ## [deg]
+
+    ## deg to rad
+    roll  = deg2rad( roll )                   ## [rad]
+    pitch = deg2rad( pitch )                  ## [rad]
+
+    ## basic
+    cr, sr = cos( roll ) , sin( roll )
+    cp, sp = cos( pitch ), sin( pitch )
+
+    ## calculate ENU command
+    acc_cmd[0] = acc_str * cr * sp # * (-1)
+    acc_cmd[1] = acc_str * sr * (-1)
+    acc_cmd[2] = acc_str * cr * cp
+
+
+
+if __name__ == "__main__":
+    from numpy import array, float64
+    from numpy import random
+
+    acc = random.rand(3) * 10
+    cmd = array([0,0,0,0], dtype=float64)
+
+    _thrust_to_RPY( acc, cmd )
+    print(acc, cmd)
+    _thrust_to_ENU( cmd, acc )
+    print(acc, cmd)
+
+    _thrust_to_RPY( acc, cmd )
+    print(acc, cmd)
+    _thrust_to_ENU( cmd, acc )
+    print(acc, cmd)
+
+    acc = array([1,0,0], dtype=float64)
+    cmd = array([0,0,0,0], dtype=float64)
+
+    _thrust_to_RPY( acc, cmd )
+    print(acc, cmd)
+
+    acc = array([0,1,0], dtype=float64)
+    cmd = array([0,0,0,0], dtype=float64)
+
+    _thrust_to_RPY( acc, cmd )
+    print(acc, cmd)
+
+    acc = array([0,0,1], dtype=float64)
+    cmd = array([0,0,0,0], dtype=float64)
+
+    _thrust_to_RPY( acc, cmd )
+    print(acc, cmd)
+
+    acc = array([0,0,0], dtype=float64)
+    cmd = array([0,0,0,0], dtype=float64)
+
+    _thrust_to_RPY( acc, cmd )
+    print(acc, cmd)
