@@ -11,7 +11,7 @@ Remember acc always towards z-direction of drone's coordinate.<br>
 And coordinate ROTATES in 3 -> 2 -> 1 ORDER!!<br>
 
 Please keep in mind these... and look at the image below..<br>
-![optimus01](./image/optimus01.png)
+![optimus01](.././image/optimus01.png)
 
 In ENU coordinate, drone's acc vector can be anywhere. But this vector must be aligned on drone body's z-direction.<br>
 So, we can figure out drone's coordinate in roll, pitch, yaw by rotating to align coordinate's z-basis with the acc vector.<br>
