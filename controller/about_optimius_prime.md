@@ -35,7 +35,7 @@ $$
 ${-^{w}v_{N} \over \lVert v \rVert}$<br>
 
 This image is show what you did in this three step.
-![optimus02](../.image/optimus02.png)
+![optimus02](.././image/optimus02.png)
 
 Yeah! We get roll, pitch, yaw, acc from aE, aN, aD command!
 
@@ -50,7 +50,7 @@ And we promised that we don't rotate yaw.<br>
 
 Now we know rotation matrix that transform ENU coordinate vector to drone's body coordinate vector. Then, rotation matrix that transform drone's body coordinate vector to ENU coordinate vector is ... the transpose of rotation matrix! Because rotation matrix is orthonormal.<br>
 
-![optimus03](../.image/optimus03.png)
+![optimus03](.././image/optimus03.png)
 
 So, acc vector in ENU coordinate is parallel with third column of transposed rotation matrix. With multiplying norm of acc, we can get aE, aN, aU from roll, pitch, yaw, acc(norm of acc).<br>
 
@@ -60,4 +60,4 @@ But you can realize something is strange.
 
 필자도 아는데 어디서 이런 요상한 일이 일어났는지 모르겠으니 교수님한테 갈거임. 일단 이상한 점은 밑의 그림을 참조해주세요.
 
-![optimus04](../.image/optimus05.png)
+![optimus04](.././image/optimus05.png)
