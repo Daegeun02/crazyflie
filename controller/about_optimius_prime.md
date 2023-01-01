@@ -20,7 +20,6 @@ Second, rotate pitch. You can imagine triangle like OED in image above.<br>
 In that triangle, $\angle EDO = {\pi \over 2}$ and $\angle EOD = \theta$. So, you can get $\theta$ easily with arcsin function. Like this,
 $$
 \theta =
-\arcsin{
-{^{w}v_{E} \over \sqrt{^{w}v^{2}_{E}+^{w}v^{2}_{U}}}
-}
+\arcsin
 $$
+${^{w}v_{E} \over \sqrt{^{w}v^{2}_{E}+^{w}v^{2}_{U}}}$
