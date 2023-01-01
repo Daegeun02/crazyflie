@@ -20,11 +20,7 @@ First of all, we don't rotate yaw.. It's complicate.. I'll write this later..<br
 
 Second, rotate pitch. You can imagine triangle like OED in image above.<br>
 In that triangle, $\angle EDO = {\pi \over 2}$ and $\angle EOD = \theta$. So, you can get $\theta$ easily with arcsin function. Like this,
-$$
-\theta =
-\arcsin
-$$
-${^{w}v_{E} \over \sqrt{^{w}v^{2}_{E}+^{w}v^{2}_{U}}}$<br>
+$\theta = \arcsin {^{w}v_{E} \over \sqrt{^{w}v^{2}_{E} + ^{w}v^{2}_{U}}}$<br>
 
 Third, rotate roll. In this time, you can imagine triangle like OEF in image above. It little complicate.. <br>
 In that triangle, $\angle FEO = {\pi \over 2}$ and $\angle FOE = - \phi$. So, you can get $\phi$ easily as we did in Second. Like this,
