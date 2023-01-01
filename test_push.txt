@@ -1,1 +1,7 @@
 How to push?
+
+1. git config --global user.name daegeun02
+2. git config --global user.password <token>
+3. git push
+4. name: Daegeun02
+5. password: <token>
