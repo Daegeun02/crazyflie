@@ -94,6 +94,7 @@ class Commander:
 
         ## controller input
         r_cmd, p_cmd, y_cmd, acc_cmd = cmd
+        acc_cmd = [0,0,acc_cmd]
 
         for _ in range(n):
 
