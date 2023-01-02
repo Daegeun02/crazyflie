@@ -12,7 +12,7 @@ from .acc_att_controller import _thrust_clip, alpha
 
 
 ## transformer
-from .optimus_prime import _thrust_to_ENU, _thrust_to_RPY
+from .optimus_prime import _command_as_ENU, _command_as_RPY
 
 
 
@@ -61,7 +61,7 @@ class Commander:
             acc_cmd = cmd + acc_com
         
             ## transform command
-            _thrust_to_RPY( acc_cmd, command )
+            _command_as_RPY( acc_cmd, command )
 
             ## input
             commander.send_setpoint(
