@@ -40,7 +40,7 @@ class Commander:
 
 
     ## command should be given in ENU
-    def send_setpoint_ENU(self, cmd, n):
+    def send_setpoint_ENU(self, acc_cmd, n):
         ## crazyflie
         cf = self.cf
         ## commander
@@ -53,8 +53,8 @@ class Commander:
         acc_cur = cf.acc
 
         ## command in ENU
-        acc_com += _dot_acceleration( cmd , acc_cur ) 
-        acc_cmd = cmd + acc_com
+        acc_com += _dot_acceleration( acc_cmd , acc_cur ) 
+        acc_cmd = acc_cmd + acc_com
 
         ## transform command
         _command_as_RPY( acc_cmd, command )
