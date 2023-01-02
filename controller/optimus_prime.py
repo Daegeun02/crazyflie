@@ -2,8 +2,6 @@ from numpy        import arcsin, rad2deg
 from numpy        import sqrt
 from numpy        import cos, sin, deg2rad
 
-from acc_att_controller import alpha, _thrust_clip
-
 
 
 def _command_as_RPY( acc_cmd, command ):
@@ -43,8 +41,7 @@ def _command_as_RPY( acc_cmd, command ):
     command[0] = rad2deg( roll_in_rad )             ## [deg]
 
     ## acc strength
-    command_cmd = acc_str * alpha
-    command[3] = _thrust_clip( command_cmd )         ## m/s^2
+    command[3] = acc_str                            ## m/s^2
 
 
 def _command_as_ENU( command, acc_cmd ):
@@ -59,21 +56,18 @@ def _command_as_ENU( command, acc_cmd ):
     4. acc
     """
     ## unpack command
-    roll, pitch, yaw, thrust = command       ## [deg]
+    roll, pitch, yaw, acc_str = command       ## [deg]
 
     ## deg to rad
     roll  = deg2rad( roll )                   ## [rad]
     pitch = deg2rad( pitch )                  ## [rad]
-
-    ## thrust to acc
-    acc_str = thrust / alpha
 
     ## basic
     cr, sr = cos( roll ) , sin( roll )
     cp, sp = cos( pitch ), sin( pitch )
 
     ## calculate ENU command
-    acc_cmd[0] = acc_str * cr * sp # * (-1)
+    acc_cmd[0] = acc_str * cr * sp
     acc_cmd[1] = acc_str * sr * (-1)
     acc_cmd[2] = acc_str * cr * cp
 

@@ -5,20 +5,15 @@ alpha = (45000/9.81)
 ## P loop constant
 Kp = 0.3 
 
+K_T = alpha * Kp
 
 
-def _dot_acceleration(acc_cmd, acc_cur):
+
+def _dot_thrust(command, acc_cur):
     ## difference
-    dot_acc = acc_cmd - acc_cur
-    ## return
-    return dot_acc              ## vector with shape (3,)
-
-
-def _dot_thrust(acc_cmd, acc_cur):
-    ## difference
-    dot_thr = norm(acc_cmd - acc_cur)
+    dot_acc = command[3] - norm( acc_cur )
     ## command
-    dot_thr = Kp * alpha * dot_thr
+    dot_thr = K_T * dot_acc
     ## return
     return dot_thr
 

@@ -3,11 +3,12 @@ from time import sleep
 
 
 ## memory space
-from numpy import zeros
+from numpy        import zeros
+from numpy.linalg import norm
 
 
 ## control loop
-from .acc_att_controller import _dot_thrust , _dot_acceleration
+from .acc_att_controller import _dot_thrust
 from .acc_att_controller import _thrust_clip, alpha
 
 
@@ -28,8 +29,6 @@ class Commander:
         self.record2 = []
         ## store commands
         self.command = zeros(4)         ## RPY,T
-        ## acceleration compansation
-        self.acc_com = zeros(3)         ## ENU
 
     
     def init_send_setpoint(self):
@@ -46,15 +45,10 @@ class Commander:
         ## commander
         commander = cf.commander
         command   = self.command
-        acc_com   = self.acc_com
         ## timestep
         dt = self.dt / n
         ## acceleration current
         acc_cur = cf.acc
-
-        ## command in ENU
-        acc_com += _dot_acceleration( acc_cmd , acc_cur ) 
-        acc_cmd = acc_cmd + acc_com
 
         ## transform command
         _command_as_RPY( acc_cmd, command )
@@ -62,7 +56,7 @@ class Commander:
         for _ in range(n):
 
             ## closed loop
-            self.thrust += _dot_thrust( acc_cmd, acc_cur )
+            self.thrust += _dot_thrust( command, acc_cur )
             
             ## cliping
             thrust = _thrust_clip( self.thrust )
