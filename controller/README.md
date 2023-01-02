@@ -67,7 +67,7 @@ $\phi = arcsin ({-^{w}v_{N} \over \lVert v \rVert})$<br>
 This image is show what you did in this three step.
 ![optimus02](.././image/optimus02.png)
 
-Yeah! We get roll, pitch, yaw, acc from aE, aN, aD command!
+Yeah! We get roll, pitch, yaw, acc from $a_{E}, a_{N}, a_{D}$ command!
 
 ### 2. _thrust_to_ENU
 This function translate command in drone's body coordinate to ENU coordinate.<br>
@@ -82,7 +82,7 @@ Now we know rotation matrix that transform ENU coordinate vector to drone's body
 
 ![optimus03](.././image/optimus03.png)
 
-So, acc vector in ENU coordinate is parallel with third column of transposed rotation matrix. With multiplying norm of acc, we can get aE, aN, aU from roll, pitch, yaw, acc(norm of acc).<br>
+So, acc vector in ENU coordinate is parallel with third column of transposed rotation matrix. With multiplying norm of acc, we can get $a_{E}, a_{N}, a_{U}$ from $\phi, \theta, \psi$, acc(norm of acc).<br>
 
 ![optimus04](.././image/optimus04.png)
 
