@@ -18,9 +18,9 @@ Just insert $[0,\ 0,\ 0,\ 0]$ as command.
 You can use this function as crazyflie's send_setpoint function.<br>
 The main difference between this one and crazyflie's one is the input of function.
 This function get __acc_cmd__ in __NED__ like $[aN,\ aE,\ aD]$, 
-but crazyflie's get __command__ like $[\phi,\ \theta,\ \psi,\ thrust]$.<br>
+but crazyflie's get __command__ like $[\phi,\ \theta,\ \dot{\psi},\ T]$.<br>
 Because we thought it is more convenient for user who use our send_setpoint function.<br>
-Thanks for __optimus_prime.py__ we can translate $[aN,\ aE,\ aD]$ to $[\phi,\ \theta,\ \psi,\ thrust]$.
+Thanks for __optimus_prime.py__ we can translate $[aN,\ aE,\ aD]$ to $[\phi,\ \theta,\ \dot{\psi},\ T]$.
 
 You can choose Hz of the feedback loop 1 ~ 10 Hz and Hz of this function is limited in 10 Hz.<br>
 
