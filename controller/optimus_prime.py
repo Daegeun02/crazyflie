@@ -1,10 +1,12 @@
 from numpy        import arcsin, rad2deg
-from numpy        import cos, sin, deg2rad
 from numpy        import sqrt
+from numpy        import cos, sin, deg2rad
+
+from acc_att_controller import alpha, _thrust_clip
 
 
 
-def _thrust_to_RPY( acc_cmd, command ):
+def _command_as_RPY( acc_cmd, command ):
     """
     this function translates acc_cmd in ENU coordinate,
     to drone's body coordinate roll, pitch, yaw, acc
@@ -22,7 +24,7 @@ def _thrust_to_RPY( acc_cmd, command ):
 
     ## acceleration to z-direction in drone's coordinate
     ## 3. yaw
-    command[2] = 0              ## do not rotate,  [deg]
+    command[2] = 0              ## do not rotate, [deg]
 
     ## 2. pitch
     acc_str = sqrt( aE**2 + aU**2 )
@@ -30,21 +32,22 @@ def _thrust_to_RPY( acc_cmd, command ):
         pitch_in_rad = arcsin( aE / acc_str )       ## [rad]
     else:
         pitch_in_rad = 0
-    command[1] = rad2deg( pitch_in_rad )        ## [deg]
+    command[1] = rad2deg( pitch_in_rad )            ## [deg]
 
     ## 1. roll
     acc_str = sqrt( aN**2 + acc_str**2 )
     if acc_str:
-        roll_in_rad = arcsin( -aN / acc_str )        ## [rad]
+        roll_in_rad = arcsin( -aN / acc_str )       ## [rad]
     else:
         roll_in_rad = 0
-    command[0] = rad2deg( roll_in_rad )          ## [deg]
+    command[0] = rad2deg( roll_in_rad )             ## [deg]
 
     ## acc strength
-    command[3] = acc_str                        ## m/s^2
+    command_cmd = acc_str * alpha
+    command[3] = _thrust_clip( command_cmd )         ## m/s^2
 
 
-def _thrust_to_ENU( command, acc_cmd ):
+def _command_as_ENU( command, acc_cmd ):
     """
     this function translate command about drone's body coordinate,
     to ENU coordinate
@@ -56,11 +59,14 @@ def _thrust_to_ENU( command, acc_cmd ):
     4. acc
     """
     ## unpack command
-    roll, pitch, yaw, acc_str = command       ## [deg]
+    roll, pitch, yaw, thrust = command       ## [deg]
 
     ## deg to rad
     roll  = deg2rad( roll )                   ## [rad]
     pitch = deg2rad( pitch )                  ## [rad]
+
+    ## thrust to acc
+    acc_str = thrust / alpha
 
     ## basic
     cr, sr = cos( roll ) , sin( roll )
@@ -80,36 +86,36 @@ if __name__ == "__main__":
     acc = random.rand(3) * 10
     cmd = array([0,0,0,0], dtype=float64)
 
-    _thrust_to_RPY( acc, cmd )
+    _command_as_RPY( acc, cmd )
     print(acc, cmd)
-    _thrust_to_ENU( cmd, acc )
+    _command_as_ENU( cmd, acc )
     print(acc, cmd)
 
-    _thrust_to_RPY( acc, cmd )
+    _command_as_RPY( acc, cmd )
     print(acc, cmd)
-    _thrust_to_ENU( cmd, acc )
+    _command_as_ENU( cmd, acc )
     print(acc, cmd)
 
     acc = array([1,0,0], dtype=float64)
     cmd = array([0,0,0,0], dtype=float64)
 
-    _thrust_to_RPY( acc, cmd )
+    _command_as_RPY( acc, cmd )
     print(acc, cmd)
 
     acc = array([0,1,0], dtype=float64)
     cmd = array([0,0,0,0], dtype=float64)
 
-    _thrust_to_RPY( acc, cmd )
+    _command_as_RPY( acc, cmd )
     print(acc, cmd)
 
     acc = array([0,0,1], dtype=float64)
     cmd = array([0,0,0,0], dtype=float64)
 
-    _thrust_to_RPY( acc, cmd )
+    _command_as_RPY( acc, cmd )
     print(acc, cmd)
 
     acc = array([0,0,0], dtype=float64)
     cmd = array([0,0,0,0], dtype=float64)
 
-    _thrust_to_RPY( acc, cmd )
+    _command_as_RPY( acc, cmd )
     print(acc, cmd)

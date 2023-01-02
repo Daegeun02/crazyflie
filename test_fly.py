@@ -1,11 +1,8 @@
-import time 
 from numpy.linalg import norm
-from numpy import array, zeros_like, ones, ones_like, linspace, append
+from numpy import zeros_like, ones, linspace, append
 
-from controller                    import Commander
-from controller.acc_att_controller import alpha
-
-from filter import LPF
+from controller import Commander
+from controller import alpha
 
 from visualizer import visualize_thrust
 
@@ -25,22 +22,6 @@ def guidance_cmd(acc_cmd, dt):
     return roll_, pitch_, yawRate_, acc
 
 
-def mission_assigner(mission, cmd, step):
-    if len(cmd) != len(step):
-        raise ValueError('you are idiot')
-
-    unit_step_prev = 0
-
-    for i in len(cmd):
-        unit_step = step[i]
-        cmd       = cmd[i]
-
-        mission[unit_step_prev:unit_step] = cmd
-
-        unit_step_prev = unit_step
-
-
-
 def test_fly(timestep, cf, n=10):
     ## mission
     t = linspace(0,timestep[-1],len(timestep)*n)
@@ -58,7 +39,7 @@ def test_fly(timestep, cf, n=10):
     dt = timestep[1] - timestep[0]
 
     ## commander
-    commander = Commander(cf, 111, dt)
+    commander = Commander(cf, dt)
 
     commander.init_send_setpoint()
 
@@ -71,11 +52,11 @@ def test_fly(timestep, cf, n=10):
 
         referen[idx:idx+n] = acc
 
-        commander.send_setpoint(cmd=[roll_, pitch_, yawRate_, acc], n=n)
+        commander.send_setpoint_RPY(cmd=[roll_, pitch_, yawRate_, acc], n=n)
 
         idx += n
 
-    commander.stop_setpoint()
+    commander.stop_send_setpoint()
 
     record1 = commander.record1
     record2 = commander.record2

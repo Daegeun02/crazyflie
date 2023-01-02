@@ -1,28 +1,35 @@
-from numpy.linalg import norm as norm
-from numpy import zeros, array
+## define Hz of loop
 from time import sleep
 
-import copy
 
-from .acc_att_controller import _dot_thrust, alpha, Kp
+## memory space
+from numpy import zeros
 
-from filter import LPF
-from filter import EMAF
+
+## control loop
+from .acc_att_controller import _dot_thrust , _dot_acceleration
+from .acc_att_controller import _thrust_clip, alpha
+
+
+## transformer
+from .optimus_prime import _thrust_to_ENU, _thrust_to_RPY
+
+
 
 class Commander:
     
-    band_limit = 10
 
-    def __init__(self, cf, qtm, dt):
+    def __init__(self, cf, dt):
         self.cf  = cf
-        self.qtm = qtm
-        self.lpf = LPF(band_limit=self.__class__.band_limit, dt=dt)._filter
-        self.emf = EMAF()._filter
         self.dt  = dt
 
         self.thrust = alpha * 9.81
         self.record1 = []
         self.record2 = []
+        ## store commands
+        self.command = zeros(4)         ## RPY,T
+        ## acceleration compansation
+        self.acc_com = zeros(3)         ## ENU
     
     def init_send_setpoint(self):
         ## commander
@@ -30,8 +37,44 @@ class Commander:
         ## initialize
         commander.send_setpoint(0, 0, 0, 0)
 
+    
+    ## command should be given in ENU
+    def send_setpoint_ENU(self, cmd, n):
+        ## crazyflie
+        cf = self.cf
+        ## commander
+        commander = cf.commander
+        command   = self.command
+        acc_com   = self.acc_com
+        ## timestep
+        dt = self.dt / n
+        ## acceleration current
+        acc_cur = cf.acc
 
-    def send_setpoint(self, cmd, n):
+        for _ in range(n):
+
+            ## closed loop
+            acc_com += _dot_acceleration( cmd, acc_cur )      ## integration
+
+            ## command in ENU
+            acc_cmd = cmd + acc_com
+        
+            ## transform command
+            _thrust_to_RPY( acc_cmd, command )
+
+            ## input
+            commander.send_setpoint(
+                command[0],         ## roll
+                command[1],         ## pitch
+                command[2],         ## yawRate
+                command[3]          ## thrust
+            )
+
+            sleep(dt)
+
+
+    ## command should be given in RPY, T
+    def send_setpoint_RPY(self, cmd, n):
         ## crazyflie
         cf = self.cf
         ## commander
@@ -41,9 +84,6 @@ class Commander:
         record2 = self.record2
         ## timestep
         dt = self.dt / n
-        ## filter
-        # _filter = self.emf
-        # _filter = self.lpf
         ## current state
         acc_cur = cf.acc
 
@@ -51,35 +91,25 @@ class Commander:
         r_cmd, p_cmd, y_cmd, acc_cmd = cmd
 
         for _ in range(n):
-            ## current state
-            # acc_cur = _filter(cf.acc)
 
             ## closed loop
             self.thrust += _dot_thrust(acc_cmd, acc_cur)      ## integration
 
             ## cliping
-            thrust = thrust_clip(self.thrust)
+            thrust, self.thrust = _thrust_clip(self.thrust)
 
             ## input
             commander.send_setpoint(r_cmd, p_cmd, y_cmd, thrust)
 
+            ## record
             record1.append(acc_cur[2]) 
             record2.append(thrust)
 
             sleep(dt)
 
 
-    def stop_setpoint(self):
+    def stop_send_setpoint(self):
+        ## commander
         commander = self.cf.commander
-
+        ## stop
         commander.send_stop_setpoint()
-
-
-def thrust_clip(thrust_cmd):
-    ## thrust clip thrust
-    if (thrust_cmd > 60000):
-        thrust_cmd = 60000
-    elif (thrust_cmd < 10001):
-        thrust_cmd = 10001
-
-    return int(thrust_cmd)
