@@ -30,6 +30,7 @@ class Commander:
         self.command = zeros(4)         ## RPY,T
         ## acceleration compansation
         self.acc_com = zeros(3)         ## ENU
+
     
     def init_send_setpoint(self):
         ## commander
