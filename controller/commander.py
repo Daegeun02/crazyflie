@@ -38,7 +38,7 @@ class Commander:
         ## initialize
         commander.send_setpoint(0, 0, 0, 0)
 
-    
+
     ## command should be given in ENU
     def send_setpoint_ENU(self, cmd, n):
         ## crazyflie
@@ -52,23 +52,27 @@ class Commander:
         ## acceleration current
         acc_cur = cf.acc
 
+        ## command in ENU
+        acc_com += _dot_acceleration( cmd , acc_cur ) 
+        acc_cmd = cmd + acc_com
+
+        ## transform command
+        _command_as_RPY( acc_cmd, command )
+
         for _ in range(n):
 
             ## closed loop
-            acc_com += _dot_acceleration( cmd, acc_cur )      ## integration
-
-            ## command in ENU
-            acc_cmd = cmd + acc_com
-        
-            ## transform command
-            _command_as_RPY( acc_cmd, command )
+            self.thrust += _dot_thrust( acc_cmd, acc_cur )
+            
+            ## cliping
+            thrust = _thrust_clip( self.thrust )
 
             ## input
             commander.send_setpoint(
                 command[0],         ## roll
                 command[1],         ## pitch
                 command[2],         ## yawRate
-                command[3]          ## thrust
+                thrust              ## thrust
             )
 
             sleep(dt)
@@ -97,7 +101,7 @@ class Commander:
             self.thrust += _dot_thrust(acc_cmd, acc_cur)      ## integration
 
             ## cliping
-            thrust, self.thrust = _thrust_clip(self.thrust)
+            thrust = _thrust_clip(self.thrust)
 
             ## input
             commander.send_setpoint(r_cmd, p_cmd, y_cmd, thrust)
