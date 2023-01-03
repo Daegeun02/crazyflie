@@ -30,7 +30,7 @@ But you can add or request more data from crazyflie. Here's steps for add new da
 It basically has two steps. First, make Config function. Second, make callback function. That's it.<br>
 
 In first step, you add config to you crazyflie drone. It's like requesting what you want. use __add_variable__ function as i did, it gets two parameters, Log and DataType. Check below link. This is about what you can request to crazyflie.<br>
-Link : [crazyflie logging](https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/api/logs/)
+Link : [crazyflie logging](https://www.bitcraze.io/documentation/repository/crazyflie-firmware/master/api/logs/)<br>
 Second, callabck function. It's easy just see what i did. And do as i did.<br>
 
 ## 2. Qualisys - Beacon
