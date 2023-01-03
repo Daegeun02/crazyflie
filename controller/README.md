@@ -25,6 +25,7 @@ Thanks for __optimus_prime.py__ we can translate $[a_{N},\ a_{E},\ a_{D}]$ to $[
 You can choose Hz of the feedback loop 1 ~ 10 Hz and Hz of this function is limited in 10 Hz.<br>
 
 Here's about feedback loop in function
+![command01](.././image/command01.png)
 > To Be Continue..
 
 ### 3. stop_setpoint
