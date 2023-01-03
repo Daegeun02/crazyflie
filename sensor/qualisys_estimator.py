@@ -74,9 +74,9 @@ class QtmWrapper(Thread):
             temp_cf_data = bodies[index]
 
             position = temp_cf_data[0]
-            x = position[0]                     ## m
-            y = position[1]                     ## m
-            z = position[2]                     ## m
+            x = position[0] / 1000              ## m
+            y = position[1] / 1000              ## m
+            z = position[2] / 1000              ## m
 
             euler = temp_cf_data[1]
             R = euler[2]                        ## deg
