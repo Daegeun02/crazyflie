@@ -91,3 +91,5 @@ But you can realize something is strange.
 필자도 아는데 어디서 이런 요상한 일이 일어났는지 모르겠으니 교수님한테 갈거임. 일단 이상한 점은 밑의 그림을 참조해주세요.
 
 ![optimus04](.././image/optimus05.png)
+
+해결했는데, 귀찮아서 나중에 할거임.
