@@ -6,9 +6,6 @@ from controller import alpha
 
 from visualizer import visualize_thrust
 
-## takeoff
-from takeoff_test import takeoff
-
 
 
 def guidance_cmd(acc_cmd, dt):

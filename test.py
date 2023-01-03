@@ -1,10 +1,7 @@
 import cflib.crtp
 from cflib.crazyflie import Crazyflie
-# from cflib.crazyflie.log import LogConfig
 from cflib.crazyflie.syncCrazyflie import SyncCrazyflie
-# from cflib.crazyflie.syncLogger import SyncLogger
 from cflib.utils import uri_helper
-# from cflib.crazyflie.commander import Commander
 
 import numpy as np
 import time
