@@ -52,7 +52,7 @@ class QtmWrapper(Thread):
         self.qtm_6DoF_labels = [label.text.strip() for index, label in enumerate(xml.findall('*/Body/Name'))]
 
         await self.connection.stream_frames(
-            components=['6D'],
+            components=['6deuler'],
             on_packet=self._on_packet)
 
     async def _discover(self):
@@ -60,7 +60,7 @@ class QtmWrapper(Thread):
             return qtm_instance
 
     def _on_packet(self, packet):
-        header, bodies = packet.get_6d()
+        header, bodies = packet.get_6d_euler()
 
         if bodies is None:
             return
@@ -68,42 +68,38 @@ class QtmWrapper(Thread):
         if self.body_name not in self.qtm_6DoF_labels:
             print('Body ' + self.body_name + ' not found.')
         else:
+            ## who i am
             index = self.qtm_6DoF_labels.index(self.body_name)
-            temp_cf_pos = bodies[index]
-            x = temp_cf_pos[0][0] / 1000
-            y = temp_cf_pos[0][1] / 1000
-            z = temp_cf_pos[0][2] / 1000
+            ## where i am and which orientation i have
+            temp_cf_data = bodies[index]
 
-            r = temp_cf_pos[1].matrix
-            rot = [
-                [r[0], r[3], r[6]],
-                [r[1], r[4], r[7]],
-                [r[2], r[5], r[8]],
-            ]
+            position = temp_cf_data[0]
+            x = position[0]                     ## m
+            y = position[1]                     ## m
+            z = position[2]                     ## m
+
+            euler = temp_cf_data[1]
+            R = euler[2]                        ## deg
+            P = euler[1]                        ## deg
+            Y = euler[0]                        ## deg
 
             if self.on_pose:
                 # Make sure we got a position
                 if isnan(x):
                     return
 
-                self.on_pose([x, y, z, rot])
+                self.on_pose([x, y, z, R, P, Y])
 
     async def _close(self):
         await self.connection.stream_frames_stop()
         self.connection.disconnect()
 
 
-def send_extpose_rot_matrix(cf, x, y, z, rot):
-    """
-    Send the current Crazyflie X, Y, Z position and attitude as a (3x3)
-    rotaton matrix. This is going to be forwarded to the Crazyflie's
-    position estimator.
-    """
-    quat = Rotation.from_matrix(rot).as_quat()
+def send_pose(cf, x, y, z, R, P, Y):
+    cf.pos[0] = x
+    cf.pos[1] = y
+    cf.pos[2] = z
 
-    if send_full_pose:
-        cf.extpos.send_extpose(x, y, z, quat[0], quat[1], quat[2], quat[3])
-    else:
-        cf.extpos.send_extpos(x, y, z)
-
-    print(rot)
+    cf.euler_pos[0] = R
+    cf.euler_pos[1] = P
+    cf.euler_pos[2] = Y
