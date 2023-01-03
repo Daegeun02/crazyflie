@@ -1,5 +1,24 @@
 # Sensor
 
+## 0. Usage
+```python
+from sensor import start
+from sensor import QtmWrapper
+
+rigid_body_name = 'as you define in qualisys'
+
+qtm_wrapper = QtmWrapper(body_name=rigid_body_name)
+
+with SyncCrazyflie(uri, cf=Crazyflie(rw_cache='./cache')) as scf:
+
+    cf = scf.cf
+
+    start(scf, qtm_wrapper)
+
+qtm_wrapper.close()
+```
+That's all. It starts update __cf's__ pose immediatly.<br>
+
 ## 1. IMU
 
 __imu.py__ is a class to use imu in crazyflie drone.<br>
@@ -43,3 +62,8 @@ That's all.
 ### stream_frames
 __stream_frames__ is about which data you'll read by qualisys.
 By changing component, you can get different data from beacon. You can get more detail in definition.
+
+## 3. init.py
+__init.py__ is simple. It has setup function each initialize kalman filter in crazyflie imu, and so on. And get memory space in crazyflie object to store read data from sensors.<br>
+
+You only focus on last part of file. You can see how i define callback function. 
