@@ -10,6 +10,8 @@ from sensor   import start
 
 from sensor import QtmWrapper
 
+from takeoff_test import takeoff_and_land
+
 # URI to the Crazyflie to connect to
 uri = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E704')
 
@@ -21,19 +23,10 @@ def sensoring():
 
     dt = t[1] - t[0]
 
-    acc_rec = np.zeros((3,len(t)))
-    pos_rec = np.zeros((3,len(t)))
-
-    euler_pos_rec = np.zeros((3,len(t)))
-
     ## sensoring debug
     for i in range(len(t)):
-        acc_rec[:,i] = cf.acc
-        pos_rec[:,i] = cf.pos
-
-        euler_pos_rec[:,i] = cf.euler_pos
-
         print(f"acc: {cf.acc}")
+        print(f"vel: {cf.vel}")
         print(f"pos: {cf.pos}")
 
         print(f'euler_pos: {cf.euler_pos}')
@@ -41,6 +34,7 @@ def sensoring():
         print('=' * 20)
 
         time.sleep(dt)
+
 
 if __name__ == "__main__":
 
@@ -50,7 +44,6 @@ if __name__ == "__main__":
 
     with SyncCrazyflie(uri, cf=Crazyflie(rw_cache='./cache')) as scf:
         cf = scf.cf
-        scf.body_name = rigid_body_name
 
         ## sensor start
         start(scf, qtm_wrapper)
@@ -59,6 +52,9 @@ if __name__ == "__main__":
         time.sleep(1)
 
         ## sensoring debug
-        sensoring()
+        # sensoring()
+
+        ## test flight
+        takeoff_and_land(cf)
 
     qtm_wrapper.close()

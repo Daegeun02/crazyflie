@@ -25,8 +25,8 @@ class Commander:
         self.dt  = dt
 
         self.thrust = alpha * 9.81
-        self.record1 = []
-        self.record2 = []
+        self.pos_rec = []
+        self.acc_rec = []
         ## store commands
         self.command = zeros(4)         ## RPY,T
 
@@ -48,12 +48,15 @@ class Commander:
         ## timestep
         dt = self.dt / n
         ## acceleration current
+        pos_cur = cf.pos
         acc_cur = cf.acc
 
         ## transform command
         _command_as_RPY( acc_cmd, command )
 
         for _ in range(n):
+            self.pos_rec.append(pos_cur)
+            self.acc_rec.append(acc_cur)
 
             ## closed loop
             self.thrust += _dot_thrust( command, acc_cur )
@@ -68,6 +71,7 @@ class Commander:
                 command[2],         ## yawRate
                 thrust              ## thrust
             )
+            print(command)
 
             sleep(dt)
 
@@ -84,12 +88,15 @@ class Commander:
         ## timestep
         dt = self.dt / n
         ## current state
+        pos_cur = cf.pos
         acc_cur = cf.acc
 
         ## controller input
         r_cmd, p_cmd, y_cmd, acc_cmd = command
 
         for _ in range(n):
+            self.pos_rec.append(pos_cur)
+            self.acc_rec.append(acc_cur)
 
             ## closed loop
             self.thrust += _dot_thrust(command, acc_cur)      ## integration

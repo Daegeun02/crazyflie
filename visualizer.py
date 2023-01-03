@@ -3,6 +3,48 @@ from numpy import array
 
 
 
+def visualize_flight(T, pos_cur, pos_des, acc_cur, acc_des):
+    plt.figure(figsize=(11,7), dpi=200)
+
+    plt.subplot(321)
+    plt.plot(T, pos_cur[:,0], label='position x')
+    plt.plot(T, pos_des[:,0], label='desination x')
+    plt.legend()
+    plt.grid()
+
+    plt.subplot(322)
+    plt.plot(T, pos_cur[:,1], label='position y')
+    plt.plot(T, pos_des[:,1], label='desination y')
+    plt.legend()
+    plt.grid()
+
+    plt.subplot(323)
+    plt.plot(T, pos_cur[:,2], label='position z')
+    plt.plot(T, pos_des[:,2], label='desination z')
+    plt.legend()
+    plt.grid()
+
+    plt.subplot(324)
+    plt.plot(T, acc_cur[:,0], label='position x')
+    plt.plot(T, acc_des[:,0], label='desination x')
+    plt.legend()
+    plt.grid()
+
+    plt.subplot(325)
+    plt.plot(T, acc_cur[:,1], label='position y')
+    plt.plot(T, acc_des[:,1], label='desination y')
+    plt.legend()
+    plt.grid()
+
+    plt.subplot(326)
+    plt.plot(T, acc_cur[:,2], label='position z')
+    plt.plot(T, acc_des[:,2], label='desination z')
+    plt.legend()
+    plt.grid()
+
+    plt.show()
+
+
 def visualize_acc(acc_rec, acc_ref, t):
     plt.figure(figsize=(6,6), dpi=200)
 
