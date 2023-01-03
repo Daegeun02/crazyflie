@@ -11,7 +11,7 @@ class IMU:
         self.cf  = scf.cf
 
 
-    def start_get_velocity(self, period_in_ms=period_in_ms):
+    def start_get_vel(self, period_in_ms=period_in_ms):
         log_conf = LogConfig(name="velocity", period_in_ms=period_in_ms)
         log_conf.add_variable('stateEstimate.vx', 'FP16')
         log_conf.add_variable('stateEstimate.vy', 'FP16')
