@@ -1,15 +1,11 @@
 from threading import Thread
 
-from scipy.spatial.transform import Rotation
-
 import xml.etree.cElementTree as ET
 
 import qtm
 import asyncio
 
 from math import isnan
-
-send_full_pose = True
 
 
 
