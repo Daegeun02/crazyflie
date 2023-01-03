@@ -4,6 +4,27 @@ from numpy        import cos, sin, deg2rad
 
 
 
+def _command_is_not_in_there( euler, acc_cmd ):
+    ## yaw position
+    yaw = euler[2]              ## [deg]
+    yaw = deg2rad(yaw)          ## [rad]
+
+    ## basic
+    cy, sy = cos(yaw), sin(yaw)
+
+    ## update
+    aE = cy * acc_cmd[0] + sy * acc_cmd[1]
+    aN = cy * acc_cmd[1] - sy * acc_cmd[0]
+    aU = acc_cmd[2]
+
+    ## store
+    acc_cmd[0] = aE
+    acc_cmd[1] = aN
+    acc_cmd[2] = aU
+
+    return acc_cmd
+
+
 def _command_as_RPY( acc_cmd, command ):
     """
     this function translates acc_cmd in ENU coordinate,
