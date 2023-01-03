@@ -76,6 +76,17 @@ class IMU:
         log_conf.start()
 
     
+    def hijacking_command(self, period_in_ms=period_in_ms):
+        log_conf = LogConfig(name='command', period_in_ms=period_in_ms)
+        log_conf.add_variable('controller.cmd_roll' , 'FP16')
+        log_conf.add_variable('controller.cmd_pitch', 'FP16')
+        log_conf.add_variable('controller.cmd_yaw'  , 'FP16')
+
+        self.scf.cf.log.add_config(log_conf)
+        log_conf.data_received_cb.add_callback(self.command_callback)
+        log_conf.start()
+
+    
     ### callbacks ### 
     def position_callback(self, timestamp, data, logconf):
         self.cf.pos[0] = data['kalman.stateX']
@@ -105,3 +116,9 @@ class IMU:
         self.cf.euler_vel[0] = data['gyro.x']
         self.cf.euler_vel[1] = data['gyro.y']
         self.cf.euler_vel[2] = data['gyro.z']
+
+    
+    def command_callback(self, timestamp, data, logconf):
+        self.cf.cmd[0] = data['controller.cmd_roll']
+        self.cf.cmd[1] = data['controller.cmd_pitch']
+        self.cf.cmd[2] = data['controller.cmd_yaw']

@@ -10,13 +10,13 @@ import numpy as np
 import time
 
 from sensor   import start, setup
-from test_fly import test_fly
+from test_fly import test_fly, test_fly2
 from visualizer import visualize_acc, visualize_state
 
 from sensor import QtmWrapper
 
 # URI to the Crazyflie to connect to
-uri = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E719')
+uri = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E704')
 
 # The name of the rigid body in QTM that represents the Crazyflie
 rigid_body_name = 'cf1'
@@ -72,8 +72,9 @@ if __name__ == "__main__":
 
         ## control function
         # test_fly(t, cf, n=5)
+        test_fly2(t, cf)
 
         ## sensoring debug
-        sensoring()
+        # sensoring()
 
     # qtm_wrapper.close()

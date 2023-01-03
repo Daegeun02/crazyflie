@@ -73,7 +73,7 @@ class Commander:
 
 
     ## command should be given in RPY, T
-    def send_setpoint_RPY(self, cmd, n):
+    def send_setpoint_RPY(self, command, n):
         ## crazyflie
         cf = self.cf
         ## commander
@@ -87,13 +87,12 @@ class Commander:
         acc_cur = cf.acc
 
         ## controller input
-        r_cmd, p_cmd, y_cmd, acc_cmd = cmd
-        acc_cmd = [0,0,acc_cmd]
+        r_cmd, p_cmd, y_cmd, acc_cmd = command
 
         for _ in range(n):
 
             ## closed loop
-            self.thrust += _dot_thrust(acc_cmd, acc_cur)      ## integration
+            self.thrust += _dot_thrust(command, acc_cur)      ## integration
 
             ## cliping
             thrust = _thrust_clip(self.thrust)

@@ -68,9 +68,9 @@ def test_fly2(timestep, cf, n=5):
     t = linspace(0,timestep[-1],len(timestep)*n)
     referen = zeros_like(t)
     ## mission
-    mission = ones(9) * 10.5
-    mission = append(mission, linspace(10.5,9,11))
-    mission = append(mission, ones(11)*9)
+    mission = ones(9) * 10
+    mission = append(mission, linspace(10,9.8,11))
+    mission = append(mission, ones(11)*9.8)
     mission = append(mission, ones(20)*9.8)
 
     if len(mission) != len(timestep):
@@ -86,7 +86,8 @@ def test_fly2(timestep, cf, n=5):
 
     for cmd in mission:
         ## command
-        acc_cmd = [0,0,cmd]
+        acc_cmd = [0,0.3,cmd]
+        print(acc_cmd)
         ## send command
         commander.send_setpoint_ENU(acc_cmd, n)
 
