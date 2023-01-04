@@ -7,6 +7,8 @@ import asyncio
 
 from math import isnan
 
+from time import time
+
 
 
 class QtmWrapper(Thread):
@@ -18,6 +20,9 @@ class QtmWrapper(Thread):
         self.connection = None
         self.qtm_6DoF_labels = []
         self._stay_open = True
+
+        self.pre_t = time()
+        self.dts = []
 
         self.start()
 
@@ -64,6 +69,12 @@ class QtmWrapper(Thread):
         if self.body_name not in self.qtm_6DoF_labels:
             print('Body ' + self.body_name + ' not found.')
         else:
+            cur_t = time()
+            dt = cur_t - self.pre_t
+            self.pre_t = cur_t
+
+            self.dts.append(dt)
+
             ## who i am
             index = self.qtm_6DoF_labels.index(self.body_name)
             ## where i am and which orientation i have
@@ -91,11 +102,25 @@ class QtmWrapper(Thread):
         self.connection.disconnect()
 
 
-def send_pose(cf, x, y, z, R, P, Y):
-    cf.pos[0] = x
-    cf.pos[1] = y
-    cf.pos[2] = z
+class SendPose:
 
-    cf.euler_pos[0] = R
-    cf.euler_pos[1] = P
-    cf.euler_pos[2] = Y
+    pre_t = 0
+
+    @classmethod
+    def send_pose(cls, cf, x, y, z, R, P, Y):
+        pre_t = cls.pre_t
+        cur_t = time()
+        dt    = cur_t - pre_t
+        cls.pre_t = cur_t
+        
+        cf.vel[0] = (x - cf.pos[0]) / dt
+        cf.vel[1] = (y - cf.pos[1]) / dt
+        cf.vel[2] = (z - cf.pos[2]) / dt
+
+        cf.pos[0] = x
+        cf.pos[1] = y
+        cf.pos[2] = z
+
+        cf.euler_pos[0] = R
+        cf.euler_pos[1] = P
+        cf.euler_pos[2] = Y

@@ -25,9 +25,9 @@ def sensoring():
 
     ## sensoring debug
     for i in range(len(t)):
-        print(f"acc: {cf.acc}")
-        print(f"vel: {cf.vel}")
         print(f"pos: {cf.pos}")
+        print(f"vel: {cf.vel}")
+        print(f"acc: {cf.acc}")
 
         print(f'euler_pos: {cf.euler_pos}')
 

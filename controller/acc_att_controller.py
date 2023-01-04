@@ -1,5 +1,7 @@
 from numpy.linalg import norm
 
+from time import time
+
 ## thrust factor constant
 alpha = (45000/9.81)
 ## P loop constant
@@ -26,3 +28,21 @@ def _thrust_clip(thrust_cmd):
         thrust_cmd = 10001
 
     return int(thrust_cmd)
+
+
+def get_velocity():
+    pass
+
+class GetVelocity:
+
+    def __init__(self):
+        self.t = -1
+        pass
+
+    def get_velocity(self):
+        pre_t = self.t
+        cur_t = time()
+        dt = cur_t - pre_t
+        
+        pass
+    pass

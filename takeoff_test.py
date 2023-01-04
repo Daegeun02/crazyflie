@@ -38,7 +38,7 @@ def takeoff_and_land(cf, destination=[1,1,1], duration=1, landing=[2,2,0], g=9.8
     P_pos = [0,0,1] - pos
     D_pos = vel
     while ( norm( P_pos ) > tol ):
-        print(P_pos)
+        # PD loop
         acc_cmd = 0
         acc_cmd += P_pos * Kp
         acc_cmd -= D_pos * Kd
@@ -60,7 +60,7 @@ def takeoff_and_land(cf, destination=[1,1,1], duration=1, landing=[2,2,0], g=9.8
     P_pos = destination - pos
     D_pos = vel
     while ( norm( P_pos ) > tol ):
-        print(P_pos)
+        ## PD loop
         acc_cmd = 0
         acc_cmd += P_pos * Kp
         acc_cmd -= D_pos * Kd

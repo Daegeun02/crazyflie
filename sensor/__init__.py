@@ -3,7 +3,7 @@ from numpy import zeros
 
 from .sensor_setup           import *
 from .imu                    import IMU
-from .qualisys_estimator     import QtmWrapper, send_pose
+from .qualisys_estimator     import QtmWrapper, SendPose
 
 
 
@@ -30,10 +30,10 @@ def start(scf, qtm_wrapper):
 
     ## IMU
     imu = IMU(scf)
-    imu.start_get_vel()
     imu.start_get_acc()
 
     ## qualisys beacon
+    send_pose = SendPose.send_pose
     qtm_wrapper.on_pose = lambda pose: send_pose(
         cf, pose[0], pose[1], pose[2], pose[3], pose[4], pose[5]
     )
