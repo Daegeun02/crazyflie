@@ -2,7 +2,21 @@ from numpy        import arcsin, rad2deg
 from numpy        import sqrt
 from numpy        import cos, sin, deg2rad
 
+from scipy.spatial.transform import Rotation as R
 
+def _iam_ENU( acc_cur, eul_cur ):
+    cur = R.from_euler('zyx', eul_cur, degrees=True)
+    # cur = R.from_euler('yzx', eul_cur, degrees=True)
+    # cur = R.from_euler('xyz', eul_cur, degrees=True)
+    # cur = R.from_euler('yxz', eul_cur, degrees=True)
+    # cur = R.from_euler('xzy', eul_cur, degrees=True)      ## 이 새끼 뭐여
+    # cur = R.from_euler('zxy', eul_cur, degrees=True)
+
+    # cur = R.from_euler('zyz', eul_cur[::-1], degrees=True)
+    
+    g = cur.as_matrix().T @ acc_cur
+    print( g )
+    # print( acc_cur )
 
 def _command_is_not_in_there( euler, acc_cmd ):
     ## yaw position

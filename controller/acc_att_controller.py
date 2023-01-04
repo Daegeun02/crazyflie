@@ -5,7 +5,7 @@ from time import time
 ## thrust factor constant
 alpha = (45000/9.81)
 ## P loop constant
-Kp = 0.3 
+Kp = 0.1 
 
 K_T = alpha * Kp
 

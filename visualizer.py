@@ -45,6 +45,17 @@ def visualize_flight(T, pos_cur, pos_des, acc_cur, acc_des):
     plt.show()
 
 
+def visualize_acc_norm(acc_rec, acc_ref, t):
+    plt.figure(figsize=(6,6), dpi=200)
+
+    plt.plot(t, acc_rec, label='record')
+    plt.plot(t, acc_ref, label='referenc')
+    plt.legend()
+    plt.grid()
+
+    plt.show()
+
+
 def visualize_acc(acc_rec, acc_ref, t):
     plt.figure(figsize=(6,6), dpi=200)
 

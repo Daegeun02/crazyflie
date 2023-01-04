@@ -3,7 +3,7 @@ from numpy.linalg import norm
 
 from controller import Commander
 
-from visualizer import visualize_flight, visualize_acc
+from visualizer import visualize_flight, visualize_acc, visualize_acc_norm
 
 Kp = array([1.404, 1.404, 0.707])
 Kd = array([1.000, 1.000, 1.000])
@@ -45,20 +45,30 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
         P_pos = destination - pos
         D_pos = vel
 
-    for i in range(20):
-        acc_cmd = array([1,0,g])
+    print("moving")
+    destination = array([1,1,1.5])
+    P_pos = destination - pos
+    D_pos = vel
+    for _ in T:
+        # PD loop
+        acc_cmd = 0
+        acc_cmd += P_pos * Kp
+        acc_cmd -= D_pos * Kd
+        acc_cmd += [0,0,g]
 
         ## command
         commander.send_setpoint_ENU(acc_cmd, n)
 
-        print(i)
+        P_pos = destination - pos
+        D_pos = vel
 
     commander.stop_send_setpoint()
 
-    ## record
+    # ## record
     acc_rec = array(commander.acc_rec)
     acc_cmd = array(commander.acc_cmd)
-
+    acc_rec_norm = array(commander.acc_rec_norm)
+    acc_cmd_norm = array(commander.acc_cmd_norm)
     # eul_rec = array(commander.eul_rec)
     # eul_cmd = array(commander.eul_cmd)
 
@@ -67,7 +77,9 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
     t = linspace(0,5,_len)
 
     # visualize_acc(eul_rec, eul_cmd, t)
+    # visualize_acc(acc_rec, acc_cmd, t)
     visualize_acc(acc_rec, acc_cmd, t)
+    visualize_acc_norm(acc_rec_norm, acc_cmd_norm, t)
         
 
 def takeoff_and_land(cf, destination=[1,1,1], duration=1, landing=[2,2,0], g=9.81, tol=1e-1):

@@ -4,6 +4,7 @@ from time import sleep
 
 ## memory space
 from numpy import zeros, array
+from numpy.linalg import norm
 
 
 ## control loop
@@ -29,6 +30,8 @@ class Commander:
         self.acc_cmd = []
         self.eul_rec = []
         self.eul_cmd = []
+        self.acc_rec_norm = []
+        self.acc_cmd_norm = []
         ## store commands
         self.command = zeros(4)         ## RPY,T
 
@@ -58,14 +61,11 @@ class Commander:
 
         for _ in range(n):
             acc_cur = cf.rot @ cf.acc
-            # eul_cur = array(euler_cur)
-            # eul_cmd = array(command[:3])
 
             self.acc_rec.append(acc_cur)
             self.acc_cmd.append(acc_cmd)
-
-            # self.eul_rec.append(eul_cur)
-            # self.eul_cmd.append(eul_cmd)
+            self.acc_rec_norm.append(norm(acc_cur))
+            self.acc_cmd_norm.append(norm(acc_cmd))
 
             ## closed loop
             self.thrust += _dot_thrust( command, acc_cur )
@@ -93,14 +93,15 @@ class Commander:
         ## timestep
         dt = self.dt / n
         ## current state
-        pos_cur = cf.pos
         acc_cur = cf.acc
+        eul_cur = cf.euler_pos
 
         ## controller input
         r_cmd, p_cmd, y_cmd, acc_cmd = command
 
         for _ in range(n):
-            self.acc_rec.append(acc_cur)
+            print(acc_cur)
+            print(eul_cur)
 
             ## closed loop
             self.thrust += _dot_thrust(command, acc_cur)      ## integration

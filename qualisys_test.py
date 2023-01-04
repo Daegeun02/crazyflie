@@ -6,9 +6,10 @@ from cflib.utils import uri_helper
 import numpy as np
 import time
 
-from sensor   import start
-
+from sensor import start
 from sensor import QtmWrapper
+
+from controller import _iam_ENU
 
 from takeoff_test import takeoff_and_land, takeoff
 
@@ -29,8 +30,9 @@ def sensoring():
         # print(f"vel: {cf.vel}")
         # print(f"acc: {cf.acc}")
 
-        print(f'euler_pos: {cf.euler_pos}')
-        print(f'rotation matrix: \n{cf.rot}')
+        # print(f'euler_pos: {cf.euler_pos}')
+        _iam_ENU( cf.acc, cf.euler_pos)
+        # print(f'rotation matrix: \n{cf.rot}')
 
         print('=' * 20)
 
