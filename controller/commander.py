@@ -4,7 +4,6 @@ from time import sleep
 
 ## memory space
 from numpy        import zeros
-from numpy.linalg import norm
 
 
 ## control loop
@@ -71,7 +70,6 @@ class Commander:
                 command[2],         ## yawRate
                 thrust              ## thrust
             )
-            print(command)
 
             sleep(dt)
 

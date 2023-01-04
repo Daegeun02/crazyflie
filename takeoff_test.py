@@ -26,7 +26,6 @@ def takeoff_and_land(cf, destination=[1,1,1], duration=1, landing=[2,2,0], g=9.8
     pos   = cf.pos
     vel   = cf.vel
     acc   = cf.acc
-    euler = cf.euler_pos
 
     ## record
     pos_rec = []
@@ -38,6 +37,7 @@ def takeoff_and_land(cf, destination=[1,1,1], duration=1, landing=[2,2,0], g=9.8
     P_pos = [0,0,1] - pos
     D_pos = vel
     while ( norm( P_pos ) > tol ):
+        print(P_pos)
         # PD loop
         acc_cmd = 0
         acc_cmd += P_pos * Kp
@@ -56,66 +56,67 @@ def takeoff_and_land(cf, destination=[1,1,1], duration=1, landing=[2,2,0], g=9.8
         
         T.append(T[-1]+dt)
         
-    print("moving")
-    P_pos = destination - pos
-    D_pos = vel
-    while ( norm( P_pos ) > tol ):
-        ## PD loop
-        acc_cmd = 0
-        acc_cmd += P_pos * Kp
-        acc_cmd -= D_pos * Kd
-        acc_cmd += [0,0,g]
+    # print("moving")
+    # P_pos = destination - pos
+    # D_pos = vel
+    # while ( norm( P_pos ) > tol ):
+    #     print(P_pos)
+    #     ## PD loop
+    #     acc_cmd = 0
+    #     acc_cmd += P_pos * Kp
+    #     acc_cmd -= D_pos * Kd
+    #     acc_cmd += [0,0,g]
 
-        ## command
-        commander.send_setpoint_ENU(acc_cmd, n)
+    #     ## command
+    #     commander.send_setpoint_ENU(acc_cmd, n)
 
-        ## record
-        pos_rec.append(pos)
-        acc_rec.append(acc)
+    #     ## record
+    #     pos_rec.append(pos)
+    #     acc_rec.append(acc)
 
-        P_pos = destination - pos
-        D_pos = vel
+    #     P_pos = destination - pos
+    #     D_pos = vel
         
-        T.append(T[-1]+dt)
+    #     T.append(T[-1]+dt)
 
-    ## hover
-    print("hovering for 1s")
-    t = 0
-    while t < duration:
+    # ## hover
+    # print("hovering for 1s")
+    # t = 0
+    # while t < duration:
 
-        acc_cmd = [0,0,g]
+    #     acc_cmd = [0,0,g]
 
-        ## record
-        pos_rec.append(pos)
-        acc_rec.append(acc)
+    #     ## record
+    #     pos_rec.append(pos)
+    #     acc_rec.append(acc)
 
-        commander.send_setpoint_ENU(acc_cmd, n)
+    #     commander.send_setpoint_ENU(acc_cmd, n)
 
-        t += dt
+    #     t += dt
 
-        T.append(T[-1]+dt)
+    #     T.append(T[-1]+dt)
 
-    ## land
-    print("landing")
-    P_pos = landing - pos
-    D_pos = vel
-    while ( norm( P_pos ) > tol):
-        print(P_pos)
-        acc_cmd = 0
-        acc_cmd += P_pos * Kp
-        acc_cmd -= D_pos * Kd
-        acc_cmd += [0,0,g]
+    # ## land
+    # print("landing")
+    # P_pos = landing - pos
+    # D_pos = vel
+    # while ( norm( P_pos ) > tol):
+    #     print(P_pos)
+    #     acc_cmd = 0
+    #     acc_cmd += P_pos * Kp
+    #     acc_cmd -= D_pos * Kd
+    #     acc_cmd += [0,0,g]
 
-        ## record
-        pos_rec.append(pos)
-        acc_rec.append(acc)
+    #     ## record
+    #     pos_rec.append(pos)
+    #     acc_rec.append(acc)
 
-        commander.send_setpoint_ENU(acc_cmd, n)
+    #     commander.send_setpoint_ENU(acc_cmd, n)
 
-        P_pos = landing - pos
-        D_pos = vel
+    #     P_pos = landing - pos
+    #     D_pos = vel
 
-        T.append(T[-1]+dt)
+    #     T.append(T[-1]+dt)
 
     commander.stop_send_setpoint()
 
