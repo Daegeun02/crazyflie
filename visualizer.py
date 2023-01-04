@@ -49,21 +49,20 @@ def visualize_acc(acc_rec, acc_ref, t):
     plt.figure(figsize=(6,6), dpi=200)
 
     plt.subplot(311)
-    plt.plot(t, acc_rec[0,:], label='x1')
-    plt.plot(t, acc_ref[0,:], label="reference")
+    plt.plot(t, acc_rec[:,0], label='x1')
+    plt.plot(t, acc_ref[:,0], label="reference")
     plt.legend()
     plt.grid()
 
     plt.subplot(312)
-    plt.plot(t, acc_rec[1,:], label='y1')
-    plt.plot(t, acc_ref[1,:], label="reference")
+    plt.plot(t, acc_rec[:,1], label='y1')
+    plt.plot(t, acc_ref[:,1], label="reference")
     plt.legend()
     plt.grid()
 
     plt.subplot(313)
-    plt.plot(t, acc_rec[2,:], label='z1')
-    plt.plot(t, acc_ref[2,:], label="reference")
-    # plt.ylim(8,11)
+    plt.plot(t, acc_rec[:,2], label='z1')
+    plt.plot(t, acc_ref[:,2], label="reference")
     plt.legend()
     plt.grid()
 

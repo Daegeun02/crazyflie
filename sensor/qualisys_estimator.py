@@ -7,6 +7,8 @@ import asyncio
 
 from math import isnan
 
+from numpy import array
+
 from time import time
 
 
@@ -20,9 +22,6 @@ class QtmWrapper(Thread):
         self.connection = None
         self.qtm_6DoF_labels = []
         self._stay_open = True
-
-        self.pre_t = time()
-        self.dts = []
 
         self.start()
 
@@ -53,7 +52,7 @@ class QtmWrapper(Thread):
         self.qtm_6DoF_labels = [label.text.strip() for index, label in enumerate(xml.findall('*/Body/Name'))]
 
         await self.connection.stream_frames(
-            components=['6deuler'],
+            components=['6deuler', '6d'],
             on_packet=self._on_packet)
 
     async def _discover(self):
@@ -61,6 +60,26 @@ class QtmWrapper(Thread):
             return qtm_instance
 
     def _on_packet(self, packet):
+        header, bodies = packet.get_6d()
+    
+        if self.body_name not in self.qtm_6DoF_labels:
+            print('Body ' + self.body_name + ' not found.')
+        else:
+            ## who i am
+            index = self.qtm_6DoF_labels.index(self.body_name)
+            ## where i am and which orientation i have
+            if bodies is None:
+                rot = None
+            else:
+                temp_cf_data = bodies[index]
+
+                r = temp_cf_data[1].matrix
+                rot = [
+                    [r[0], r[3], r[6]],
+                    [r[1], r[4], r[7]],
+                    [r[2], r[5], r[8]],
+                ]
+
         header, bodies = packet.get_6d_euler()
 
         if bodies is None:
@@ -69,12 +88,6 @@ class QtmWrapper(Thread):
         if self.body_name not in self.qtm_6DoF_labels:
             print('Body ' + self.body_name + ' not found.')
         else:
-            cur_t = time()
-            dt = cur_t - self.pre_t
-            self.pre_t = cur_t
-
-            self.dts.append(dt)
-
             ## who i am
             index = self.qtm_6DoF_labels.index(self.body_name)
             ## where i am and which orientation i have
@@ -95,7 +108,7 @@ class QtmWrapper(Thread):
                 if isnan(x):
                     return
 
-                self.on_pose([x, y, z, R, P, Y])
+                self.on_pose([x, y, z, R, P, Y, rot])
 
     async def _close(self):
         await self.connection.stream_frames_stop()
@@ -107,7 +120,39 @@ class SendPose:
     pre_t = 0
 
     @classmethod
-    def send_pose(cls, cf, x, y, z, R, P, Y):
+    def send_extpose(cls, cf, pose):
+        if pose[6] is None:
+            cls.send_pos(
+                cf, pose[0], pose[1], pose[2], pose[3], pose[4], pose[5]
+            )
+        else:
+            cls.send_pose(
+                cf, pose[0], pose[1], pose[2], pose[3], pose[4], pose[5], pose[6]
+            )
+
+    @classmethod
+    def send_pose(cls, cf, x, y, z, R, P, Y, rot):
+        pre_t = cls.pre_t
+        cur_t = time()
+        dt    = cur_t - pre_t
+        cls.pre_t = cur_t
+        
+        cf.vel[0] = (x - cf.pos[0]) / dt
+        cf.vel[1] = (y - cf.pos[1]) / dt
+        cf.vel[2] = (z - cf.pos[2]) / dt
+
+        cf.pos[0] = x
+        cf.pos[1] = y
+        cf.pos[2] = z
+
+        cf.euler_pos[0] = R
+        cf.euler_pos[1] = P
+        cf.euler_pos[2] = Y
+
+        cf.rot = array(rot)
+    
+    @classmethod
+    def send_pos(cls, cf, x, y, z, R, P, Y):
         pre_t = cls.pre_t
         cur_t = time()
         dt    = cur_t - pre_t

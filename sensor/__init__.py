@@ -1,5 +1,5 @@
 ## sensor package
-from numpy import zeros
+from numpy import zeros, eye
 
 from .sensor_setup           import *
 from .imu                    import IMU
@@ -20,6 +20,8 @@ def setup(cf):
 
     cf.euler_pos = zeros(3)
 
+    cf.rot = eye(3)
+
 
 def start(scf, qtm_wrapper):
     ## crazyflie
@@ -33,7 +35,5 @@ def start(scf, qtm_wrapper):
     imu.start_get_acc()
 
     ## qualisys beacon
-    send_pose = SendPose.send_pose
-    qtm_wrapper.on_pose = lambda pose: send_pose(
-        cf, pose[0], pose[1], pose[2], pose[3], pose[4], pose[5]
-    )
+    send_pose = SendPose.send_extpose
+    qtm_wrapper.on_pose = lambda pose: send_pose( cf, pose )

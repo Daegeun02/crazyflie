@@ -3,7 +3,7 @@ from time import sleep
 
 
 ## memory space
-from numpy        import zeros
+from numpy import zeros, array
 
 
 ## control loop
@@ -13,6 +13,7 @@ from .acc_att_controller import _thrust_clip, alpha
 
 ## transformer
 from .optimus_prime import _command_as_ENU, _command_as_RPY
+from .optimus_prime import _command_is_not_in_there
 
 
 
@@ -24,8 +25,10 @@ class Commander:
         self.dt  = dt
 
         self.thrust = alpha * 9.81
-        self.pos_rec = []
         self.acc_rec = []
+        self.acc_cmd = []
+        self.eul_rec = []
+        self.eul_cmd = []
         ## store commands
         self.command = zeros(4)         ## RPY,T
 
@@ -47,15 +50,22 @@ class Commander:
         ## timestep
         dt = self.dt / n
         ## acceleration current
-        pos_cur = cf.pos
-        acc_cur = cf.acc
+        euler_cur = cf.euler_pos
 
         ## transform command
+        acc_cmd = _command_is_not_in_there( euler_cur, acc_cmd )
         _command_as_RPY( acc_cmd, command )
 
         for _ in range(n):
-            self.pos_rec.append(pos_cur)
+            acc_cur = cf.rot @ cf.acc
+            # eul_cur = array(euler_cur)
+            # eul_cmd = array(command[:3])
+
             self.acc_rec.append(acc_cur)
+            self.acc_cmd.append(acc_cmd)
+
+            # self.eul_rec.append(eul_cur)
+            # self.eul_cmd.append(eul_cmd)
 
             ## closed loop
             self.thrust += _dot_thrust( command, acc_cur )
@@ -80,9 +90,6 @@ class Commander:
         cf = self.cf
         ## commander
         commander = cf.commander
-        ## to debug
-        record1 = self.record1
-        record2 = self.record2
         ## timestep
         dt = self.dt / n
         ## current state
@@ -93,7 +100,6 @@ class Commander:
         r_cmd, p_cmd, y_cmd, acc_cmd = command
 
         for _ in range(n):
-            self.pos_rec.append(pos_cur)
             self.acc_rec.append(acc_cur)
 
             ## closed loop
@@ -104,10 +110,6 @@ class Commander:
 
             ## input
             commander.send_setpoint(r_cmd, p_cmd, y_cmd, thrust)
-
-            ## record
-            record1.append(acc_cur[2]) 
-            record2.append(thrust)
 
             sleep(dt)
 
