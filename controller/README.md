@@ -85,12 +85,8 @@ Now we know rotation matrix that transform ENU coordinate vector to drone's body
 
 So, acc vector in ENU coordinate is parallel with third column of transposed rotation matrix. With multiplying norm of acc, we can get $a_{E}, a_{N}, a_{U}$ from $\phi, \theta, \psi$, acc(norm of acc).<br>
 
-![optimus04](.././image/optimus04.png)
-
 But you can realize something is strange.
 
 필자도 아는데 어디서 이런 요상한 일이 일어났는지 모르겠으니 교수님한테 갈거임. 일단 이상한 점은 밑의 그림을 참조해주세요.
-
-![optimus04](.././image/optimus05.png)
 
 해결했는데, 귀찮아서 나중에 할거임.
