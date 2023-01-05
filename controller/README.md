@@ -85,8 +85,6 @@ Now we know rotation matrix that transform ENU coordinate vector to drone's body
 
 So, acc vector in ENU coordinate is parallel with third column of transposed rotation matrix. With multiplying norm of acc, we can get $a_{E}, a_{N}, a_{U}$ from $\phi, \theta, \psi$, acc(norm of acc).<br>
 
-But you can realize something is strange.
-
-필자도 아는데 어디서 이런 요상한 일이 일어났는지 모르겠으니 교수님한테 갈거임. 일단 이상한 점은 밑의 그림을 참조해주세요.
-
-해결했는데, 귀찮아서 나중에 할거임.
+### 3. _command_is_not_in_there
+__But__, this $\phi, \theta, \psi$ is for $\psi = 0$. So, if $\psi \ne 0$, drone's movement is not for ENU coordinate. The command we give to drone is for ENU coordinate. We can't drone to move along ENU coordinate, because we don't control yaw($\psi$). By giving command as drone's Heading coordinate, we can move drone as we want. In formula,<br>
+$[a_E, a_N, a_U]^T = R_{\psi} a_{c}$
