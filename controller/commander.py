@@ -44,7 +44,7 @@ class Commander:
 
 
     ## command should be given in ENU
-    def send_setpoint_ENU(self, acc_cmd, n):
+    def send_setpoint_ENU(self, acc_cmd, n=5):
         ## crazyflie
         cf = self.cf
         ## commander
@@ -85,7 +85,7 @@ class Commander:
 
 
     ## command should be given in RPY, T
-    def send_setpoint_RPY(self, command, n):
+    def send_setpoint_RPY(self, command, n=5):
         ## crazyflie
         cf = self.cf
         ## commander

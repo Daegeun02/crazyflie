@@ -31,6 +31,28 @@ qtm_wrapper.close()
 That's all. It starts update __cf's__ pose immediatly.<br>
 
 ## 2. controller
+This package is to make easy to use crazyflie control function __send_setpoint__.
+
+### Usage
+```python
+from controller import Commander
+
+## commander
+commander = Commander(cf, dt)
+commander.init_send_setpoint()
+
+## state
+pos = cf.pos
+vel = cf.vel
+
+## flight
+acc_cmd = guidance_function( pos, vel )
+
+commander.send_setpoint_ENU( acc_cmd )
+
+## end flight
+commander.stop_send_setpoint()
+```
 
 ## 3. filter
 

@@ -15,9 +15,6 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
     T = linspace(0,5,51)
     dt = T[1] - T[0]
     
-    ## Hz of PD loop
-    n = 5
-
     ## commander
     commander = Commander(cf, dt)
     commander.init_send_setpoint()
@@ -40,7 +37,7 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
         acc_cmd += [0,0,g]
 
         ## command
-        commander.send_setpoint_ENU(acc_cmd, n)
+        commander.send_setpoint_ENU(acc_cmd)
 
         P_pos = destination - pos
         D_pos = vel
@@ -57,7 +54,7 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
         acc_cmd += [0,0,g]
 
         ## command
-        commander.send_setpoint_ENU(acc_cmd, n)
+        commander.send_setpoint_ENU(acc_cmd)
 
         P_pos = destination - pos
         D_pos = vel
