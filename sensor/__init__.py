@@ -35,5 +35,4 @@ def start(scf, qtm_wrapper):
     imu.start_get_acc()
 
     ## qualisys beacon
-    send_pose = SendPose.send_extpose
-    qtm_wrapper.on_pose = lambda pose: send_pose( cf, pose )
+    qtm_wrapper.on_pose = lambda pose: SendPose.send_extpose( cf, pose )

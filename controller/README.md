@@ -87,4 +87,4 @@ So, acc vector in ENU coordinate is parallel with third column of transposed rot
 
 ### 3. _command_is_not_in_there
 __But__, this $\phi, \theta, \psi$ is for $\psi = 0$. So, if $\psi \ne 0$, drone's movement is not for ENU coordinate. The command we give to drone is for ENU coordinate. We can't drone to move along ENU coordinate, because we don't control yaw $(\psi)$. By giving command as drone's Heading coordinate, we can move drone as we want. In formula,<br>
-$[a_E, a_N, a_U]^T = R_{\psi} a_{c}$
+$[a_E, a_N, a_U]^T = R_{\psi} a_{c}$.
