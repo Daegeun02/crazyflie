@@ -1,24 +1,5 @@
 # Sensor
 
-## 0. Usage
-```python
-from sensor import start
-from sensor import QtmWrapper
-
-rigid_body_name = 'as you define in qualisys'
-
-qtm_wrapper = QtmWrapper(body_name=rigid_body_name)
-
-with SyncCrazyflie(uri, cf=Crazyflie(rw_cache='./cache')) as scf:
-
-    cf = scf.cf
-
-    start(scf, qtm_wrapper)
-
-qtm_wrapper.close()
-```
-That's all. It starts update __cf's__ pose immediatly.<br>
-
 ## 1. IMU
 
 __imu.py__ is a class to use imu in crazyflie drone.<br>
