@@ -113,27 +113,3 @@ if __name__ == "__main__":
     print(acc, cmd)
     _command_as_ENU( cmd, acc )
     print(acc, cmd)
-
-    acc = array([1,0,0], dtype=float64)
-    cmd = array([0,0,0,0], dtype=float64)
-
-    _command_as_RPY( acc, cmd )
-    print(acc, cmd)
-
-    acc = array([0,1,0], dtype=float64)
-    cmd = array([0,0,0,0], dtype=float64)
-
-    _command_as_RPY( acc, cmd )
-    print(acc, cmd)
-
-    acc = array([0,0,1], dtype=float64)
-    cmd = array([0,0,0,0], dtype=float64)
-
-    _command_as_RPY( acc, cmd )
-    print(acc, cmd)
-
-    acc = array([0,0,0], dtype=float64)
-    cmd = array([0,0,0,0], dtype=float64)
-
-    _command_as_RPY( acc, cmd )
-    print(acc, cmd)
