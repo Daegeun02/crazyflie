@@ -3,7 +3,7 @@ from time import sleep
 
 
 ## memory space
-from numpy import zeros, array
+from numpy import zeros
 from numpy.linalg import norm
 
 
@@ -34,6 +34,14 @@ class Commander:
         self.acc_cmd_norm = []
         ## store commands
         self.command = zeros(4)         ## RPY,T
+    
+    def record(self, cf, acc_cmd):
+        acc_cur = cf.rot @ cf.acc
+
+        self.acc_rec.append(acc_cur)
+        self.acc_cmd.append(acc_cmd)
+        self.acc_rec_norm.append(norm(acc_cur))
+        self.acc_cmd_norm.append(norm(acc_cmd))
 
     
     def init_send_setpoint(self):
@@ -54,18 +62,13 @@ class Commander:
         dt = self.dt / n
         ## acceleration current
         euler_cur = cf.euler_pos
+        acc_cur   = cf.acc
 
         ## transform command
         acc_cmd = _command_is_not_in_there( euler_cur, acc_cmd )
         _command_as_RPY( acc_cmd, command )
 
         for _ in range(n):
-            acc_cur = cf.rot @ cf.acc
-
-            self.acc_rec.append(acc_cur)
-            self.acc_cmd.append(acc_cmd)
-            self.acc_rec_norm.append(norm(acc_cur))
-            self.acc_cmd_norm.append(norm(acc_cmd))
 
             ## closed loop
             self.thrust += _dot_thrust( command, acc_cur )
@@ -94,14 +97,8 @@ class Commander:
         dt = self.dt / n
         ## current state
         acc_cur = cf.acc
-        eul_cur = cf.euler_pos
-
-        ## controller input
-        r_cmd, p_cmd, y_cmd, acc_cmd = command
 
         for _ in range(n):
-            print(acc_cur)
-            print(eul_cur)
 
             ## closed loop
             self.thrust += _dot_thrust(command, acc_cur)      ## integration
@@ -110,7 +107,12 @@ class Commander:
             thrust = _thrust_clip(self.thrust)
 
             ## input
-            commander.send_setpoint(r_cmd, p_cmd, y_cmd, thrust)
+            commander.send_setpoint(
+                command[0],         ## roll
+                command[1],         ## pitch
+                command[2],         ## yawRate
+                thrust              ## thrust
+            )
 
             sleep(dt)
 

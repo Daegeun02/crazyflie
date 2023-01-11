@@ -73,6 +73,7 @@ class QtmWrapper(Thread):
             else:
                 temp_cf_data = bodies[index]
 
+                ## body to ENU coordinate
                 r = temp_cf_data[1].matrix
                 rot = [
                     [r[0], r[3], r[6]],
