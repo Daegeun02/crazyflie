@@ -9,8 +9,6 @@ import time
 from sensor import start
 from sensor import QtmWrapper
 
-from controller import _iam_ENU
-
 from takeoff_test import takeoff_and_land, takeoff
 
 # URI to the Crazyflie to connect to
@@ -55,10 +53,10 @@ if __name__ == "__main__":
         time.sleep(1)
 
         ## sensoring debug
-        sensoring()
+        # sensoring()
 
         ## test flight
         # takeoff_and_land(cf)
-        # takeoff(cf)
+        takeoff(cf)
 
     qtm_wrapper.close()
