@@ -26,13 +26,13 @@ def sensoring():
 
     ## sensoring debug
     for i in range(len(t)):
-        # print(f"pos: {cf.pos}")
-        # print(f"vel: {cf.vel}")
-        # print(f"acc: {cf.acc}")
+        print(f"pos: {cf.pos}")
+        print(f"vel: {cf.vel}")
+        print(f"acc: {cf.acc}")
 
-        # print(f'euler_pos: {cf.euler_pos}')
-        _iam_ENU( cf.acc, cf.euler_pos)
-        # print(f'rotation matrix: \n{cf.rot}')
+        print(f'euler_pos: {cf.euler_pos}')
+        # _iam_ENU( cf.acc, cf.euler_pos)
+        print(f'rotation matrix: \n{cf.rot}')
 
         print('=' * 20)
 
@@ -55,10 +55,10 @@ if __name__ == "__main__":
         time.sleep(1)
 
         ## sensoring debug
-        # sensoring()
+        sensoring()
 
         ## test flight
         # takeoff_and_land(cf)
-        takeoff(cf)
+        # takeoff(cf)
 
     qtm_wrapper.close()
