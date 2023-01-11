@@ -43,7 +43,7 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
         D_pos = vel
 
     print("moving")
-    destination = array([2,0,1])
+    destination = array([1,1,1])
     P_pos = destination - pos
     D_pos = vel
     for _ in range(len(T)):
