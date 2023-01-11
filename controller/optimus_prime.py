@@ -9,7 +9,6 @@ def _command_is_not_in_there( euler, acc_cmd ):
     yaw = euler[2]              ## [deg]
     yaw = deg2rad(yaw)          ## [rad]
 
-
     ## basic
     cy, sy = cos(yaw), sin(yaw)
 

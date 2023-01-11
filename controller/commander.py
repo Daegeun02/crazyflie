@@ -65,7 +65,7 @@ class Commander:
         acc_cur   = cf.acc
 
         ## transform command
-        # acc_cmd = _command_is_not_in_there( euler_cur, acc_cmd )
+        acc_cmd = _command_is_not_in_there( euler_cur, acc_cmd )
         _command_as_RPY( acc_cmd, command )
 
         for _ in range(n):
