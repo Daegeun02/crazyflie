@@ -7,7 +7,6 @@ from numpy        import cos, sin, deg2rad
 def _command_is_not_in_there( euler, acc_cmd ):
     ## yaw position
     yaw = euler[2]              ## [deg]
-    print(yaw)
     yaw = deg2rad(yaw)          ## [rad]
 
 
@@ -67,7 +66,6 @@ def _command_as_RPY( acc_cmd, command ):
     ## cliping
     # print(command)
     command[:2] = clip(command[:2], -10, 10)
-    print(command)
 
 
 def _command_as_ENU( command, acc_cmd ):
