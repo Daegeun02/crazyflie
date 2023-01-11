@@ -7,20 +7,20 @@ from numpy        import cos, sin, deg2rad
 def _command_is_not_in_there( euler, acc_cmd ):
     ## yaw position
     yaw = euler[2]              ## [deg]
+    print(yaw)
     yaw = deg2rad(yaw)          ## [rad]
+
 
     ## basic
     cy, sy = cos(yaw), sin(yaw)
 
     ## update
-    aE = cy * acc_cmd[0] + sy * acc_cmd[1]
-    aN = cy * acc_cmd[1] - sy * acc_cmd[0]
-    aU = acc_cmd[2]
+    aE = cy * acc_cmd[0] - sy * acc_cmd[1]
+    aN = cy * acc_cmd[1] + sy * acc_cmd[0]
 
     ## store
     acc_cmd[0] = aE
     acc_cmd[1] = aN
-    acc_cmd[2] = aU
 
     return acc_cmd
 
@@ -65,7 +65,9 @@ def _command_as_RPY( acc_cmd, command ):
     command[3] = acc_str                            ## m/s^2
 
     ## cliping
-    # command[:2] = clip(command[:2], -20, 20)
+    # print(command)
+    command[:2] = clip(command[:2], -10, 10)
+    print(command)
 
 
 def _command_as_ENU( command, acc_cmd ):

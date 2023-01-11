@@ -23,17 +23,13 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
     pos   = cf.pos
     vel   = cf.vel
 
-    ## record
-    pos_rec = zeros((153,3))
-    pos_des = zeros((153,3))
-
     ## loop
     ## takeoff
     print("takeoff")
     destination = pos + array([0,0,1])
     P_pos = destination - pos
     D_pos = vel
-    for i in range(len(T)):
+    for _ in range(len(T)):
         # PD loop
         acc_cmd = 0
         acc_cmd += P_pos * Kp
@@ -46,73 +42,67 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
         P_pos = destination - pos
         D_pos = vel
 
-        pos_rec[i,:] = array(pos)
-        pos_des[i,:] = destination
-
     print("moving")
-    destination = array([1,1,1])
+    destination = array([2,0,1])
+    P_pos = destination - pos
+    D_pos = vel
+    for _ in range(len(T)):
+        # PD loop
+        acc_cmd = 0
+        acc_cmd += P_pos * Kp
+        acc_cmd -= D_pos * Kd
+        acc_cmd += [0,0,g]
+
+        ## command
+        commander.send_setpoint_ENU(acc_cmd)
+
+        P_pos = destination - pos
+        D_pos = vel
+
+    print("landing")
+    destination = array([0,0,0])
     P_pos = destination - pos
     D_pos = vel
     for i in range(len(T)):
-        # PD loop
+        ## PD loop
         acc_cmd = 0
         acc_cmd += P_pos * Kp
-        acc_cmd -= D_pos * Kd
-        acc_cmd += [0,0,g]
+        acc_cmd -= D_pos * Kd * 1.2
+        acc_cmd += [0,0,g-0.1]
 
-        ## command
+        ## commmand
         commander.send_setpoint_ENU(acc_cmd)
 
         P_pos = destination - pos
         D_pos = vel
 
-        pos_rec[i+51,:] = array(cf.pos)
-        pos_des[i+51,:] = destination
+        if norm(P_pos[2]) < 0.01:
+            print('fine landing')
+            break
 
-    # print("landing")
-    # destination = pos - array([0,0,1])
-    # P_pos = destination - pos
-    # D_pos = vel
-    # for i in range(len(T)):
-    #     ## PD loop
-    #     acc_cmd = 0
-    #     acc_cmd += P_pos * Kp
-    #     acc_cmd -= D_pos * Kd * 1.2
-    #     acc_cmd += [0,0,g-0.1]
-
-    #     ## commmand
-    #     commander.send_setpoint_ENU(acc_cmd)
-
-    #     P_pos = destination - pos
-    #     D_pos = vel
-
-    #     pos_rec[i+102,:] = array(cf.pos)
-    #     pos_des[i+102,:] = destination
-
-    #     if pos[2] <= 0:
-    #         break
+    print("land", i)
 
     commander.stop_send_setpoint()
 
-    # ## record
-    acc_rec = array(commander.acc_rec)
-    acc_cmd = array(commander.acc_cmd)
+    # # ## record
+    # acc_rec = array(commander.acc_rec)
+    # acc_cmd = array(commander.acc_cmd)
 
-    # acc_rec_norm = array(commander.acc_rec_norm)
-    # acc_cmd_norm = array(commander.acc_cmd_norm)
-    # eul_rec = array(commander.eul_rec)
-    # eul_cmd = array(commander.eul_cmd)
+    # # acc_rec_norm = array(commander.acc_rec_norm)
+    # # acc_cmd_norm = array(commander.acc_cmd_norm)
+    # # eul_rec = array(commander.eul_rec)
+    # # eul_cmd = array(commander.eul_cmd)
 
-    _len = len(acc_rec)
+    # _len = len(acc_rec)
 
-    t = linspace(0,15,_len)
-    t2 = linspace(0,15,153)
+    # t = linspace(0,15,_len)
+    # t2 = linspace(0,15,153)
 
-    # visualize_acc(eul_rec, eul_cmd, t)
+    # # visualize_acc(eul_rec, eul_cmd, t)
+    # # visualize_acc(acc_rec, acc_cmd, t)
     # visualize_acc(acc_rec, acc_cmd, t)
-    visualize_acc(acc_rec, acc_cmd, t)
-    visualize_acc(pos_rec, pos_des, t2)
-    # visualize_acc_norm(acc_rec_norm, acc_cmd_norm, t)
+    # visualize_acc(pos_rec, pos_des, t2)
+    # # visualize_acc_norm(acc_rec_norm, acc_cmd_norm, t)
         
 
 def takeoff_and_land(cf, destination=[1,1,1], duration=1, landing=[2,2,0], g=9.81, tol=1e-1):
