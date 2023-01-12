@@ -1,5 +1,5 @@
 from numpy        import arcsin, rad2deg
-from numpy        import sqrt, clip
+from numpy        import sqrt
 from numpy        import cos, sin, deg2rad
 
 
@@ -61,10 +61,6 @@ def _command_as_RPY( acc_cmd, command ):
 
     ## acc strength
     command[3] = acc_str                            ## m/s^2
-
-    ## cliping
-    # print(command)
-    command[:2] = clip(command[:2], -10, 10)
 
 
 def _command_as_ENU( command, acc_cmd ):

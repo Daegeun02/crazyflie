@@ -9,7 +9,7 @@ import time
 from sensor import start
 from sensor import QtmWrapper
 
-from takeoff_test import takeoff_and_land, takeoff
+from takeoff_test import takeoff
 
 # URI to the Crazyflie to connect to
 uri = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E704')
