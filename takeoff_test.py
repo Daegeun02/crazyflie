@@ -95,7 +95,7 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
         pos_rec[:,i+102] = array(pos)
         pos_ref[:,i+102] = pos_cmd
 
-        if norm(P_pos) < 0.05:
+        if norm(pos-destination) < 0.05:
             print('fine landing')
             break
 
