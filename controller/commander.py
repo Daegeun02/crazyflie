@@ -21,13 +21,15 @@ from .optimus_prime import _command_is_not_in_there
 class Commander:
     
 
-    def __init__(self, cf, dt):
-        self.cf  = cf
+    def __init__(self, scf, dt):
+        self.cf  = scf.cf
         self.dt  = dt
 
         self.thrust = alpha * 9.81
         ## store commands
         self.command = zeros(4)         ## RPY,T
+
+        self.ready_for_command = False
     
     
     def start_record(self):
@@ -53,6 +55,7 @@ class Commander:
         commander = self.cf.commander
         ## initialize
         commander.send_setpoint(0, 0, 0, 0)
+        self.ready_for_command = True
 
 
     ## command should be given in ENU
@@ -125,4 +128,5 @@ class Commander:
         ## commander
         commander = self.cf.commander
         ## stop
+        self.ready_for_command = False
         commander.send_stop_setpoint()

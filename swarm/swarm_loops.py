@@ -13,7 +13,7 @@ def _acc_command_loop(scf, commander):
             try:
                 command = scf.mission.pop(0)
             except:
-                command = array([ 0, 0,9.8])        ## for hovering
+                command = array([0,0,9.81])        ## for hovering
     
         else:
             try:

@@ -10,13 +10,15 @@ Kd = array([2.700, 2.700, 2.100])
 
 
 
-def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
+def takeoff(scf, destination=[0,0,1], g=9.81, tol=1e-1):
+    cf = scf.cf
+
     ## timestep
     T = linspace(0,5,51)
     dt = T[1] - T[0]
     
     ## commander
-    commander = Commander(cf, dt)
+    commander = Commander(scf, dt)
     commander.init_send_setpoint()
 
     pos_rec = zeros((3,153))
