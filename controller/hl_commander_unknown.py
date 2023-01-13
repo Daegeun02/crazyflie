@@ -23,6 +23,8 @@ def takeoff(cf, T=3, dt=0.1):
 
     print("ready to flight, takeoff")
 
+    acc_cmds = zeros((3,n))
+
     for k in range(n):
         acc_cmd = acc_cmds[:,k]
 
