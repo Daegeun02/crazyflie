@@ -86,8 +86,7 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
         acc_cmd += P_pos * Kp
         acc_cmd -= D_pos * Kd * 1.2
         acc_cmd += [0,0,g]
-        acc_cmd[:2] = clip(acc_cmd[:2], -2, 2)
-        acc_cmd[2] = clip(acc_cmd[2], 9, 10)
+        acc_cmd = clip(acc_cmd, [-2,-2, 9], [ 2, 2,11])
 
         ## commmand
         commander.send_setpoint_ENU(acc_cmd)
@@ -110,19 +109,19 @@ def takeoff(cf, destination=[0,0,1], g=9.81, tol=1e-1):
 
 def smooth_cmd(obj, cur, t, T=2):
     if t < T/2:
-        return f1(obj, cur, t)
+        return f1(obj, cur, t, T)
     elif t < T:
-        return f2(obj, cur, t)
+        return f2(obj, cur, t, T)
     else:
         return obj
 
 
-def f1(obj, cur, t):
-    out = (0.5) * (obj - cur) * t**2 + cur
+def f1(obj, cur, t, T):
+    out = (2/T**2) * (obj - cur) * t**2 + cur
 
     return out
 
-def f2(obj, cur, t):
-    out = (0.5) * (cur - obj) * (t-2)**2 + obj
+def f2(obj, cur, t, T):
+    out = (2/T**2) * (cur - obj) * (t-T)**2 + obj
 
     return out

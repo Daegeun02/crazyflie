@@ -41,7 +41,7 @@ def _command_as_RPY( acc_cmd, command ):
 
     ## acceleration to z-direction in drone's coordinate
     ## 3. yaw
-    command[2] = 0              ## do not rotate, [deg]
+    command[2] = 0              ## do not rotate, [deg/s]
 
     ## 2. pitch
     acc_str = sqrt( aE**2 + aU**2 )

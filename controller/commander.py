@@ -26,14 +26,18 @@ class Commander:
         self.dt  = dt
 
         self.thrust = alpha * 9.81
+        ## store commands
+        self.command = zeros(4)         ## RPY,T
+    
+    
+    def start_record(self):
         self.acc_rec = []
         self.acc_cmd = []
         self.eul_rec = []
         self.eul_cmd = []
         self.acc_rec_norm = []
         self.acc_cmd_norm = []
-        ## store commands
-        self.command = zeros(4)         ## RPY,T
+
     
     def record(self, cf, acc_cmd):
         acc_cur = cf.rot @ cf.acc

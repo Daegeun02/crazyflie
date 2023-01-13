@@ -12,10 +12,12 @@ from sensor import QtmWrapper
 from takeoff_test import takeoff
 
 # URI to the Crazyflie to connect to
-uri = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E704')
+uri1 = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E704')
+uri2 = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E709')
 
 # The name of the rigid body in QTM that represents the Crazyflie
-rigid_body_name = 'cf1'
+rigid_body_name1 = 'cf1'
+rigid_body_name2 = 'cf2'
 
 def sensoring():
     t = np.linspace(0,5,51)
@@ -41,9 +43,9 @@ if __name__ == "__main__":
 
     cflib.crtp.init_drivers()
 
-    qtm_wrapper = QtmWrapper(body_name=rigid_body_name)
+    qtm_wrapper = QtmWrapper(body_name=rigid_body_name1)
 
-    with SyncCrazyflie(uri, cf=Crazyflie(rw_cache='./cache')) as scf:
+    with SyncCrazyflie(uri1, cf=Crazyflie(rw_cache='./cache')) as scf:
         cf = scf.cf
 
         ## sensor start
