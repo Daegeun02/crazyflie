@@ -14,8 +14,9 @@ def setup(cf):
     reset_estimator(cf)
 
     ## memory space
-    cf.pos = zeros(3)
-    cf.vel = zeros(3)
+    # cf.pos = zeros(3)
+    # cf.vel = zeros(3)
+    cf.posvel = zeros(6)
     cf.acc = zeros(3)
 
     cf.euler_pos = zeros(3)

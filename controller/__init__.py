@@ -7,7 +7,7 @@ this class is what you should use
 """
 from .commander import Commander
 
-from .hl_commander import takeoff, landing
+from .hl_commander import takeoff, landing, hover
 
 
 ## optimus prime

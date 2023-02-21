@@ -1,5 +1,5 @@
 ## define Hz of loop
-from time import sleep
+from time import sleep, time
 
 
 ## memory space
@@ -66,7 +66,7 @@ class Commander:
         commander = cf.commander
         command   = self.command
         ## timestep
-        dt = self.dt / n
+        dt = self.dt / n - 0.005
         ## acceleration current
         euler_cur = cf.euler_pos
         acc_cur   = cf.acc

@@ -71,7 +71,7 @@ import scipy.sparse.linalg as sla
 import class_gpu 
 
 # URI to the Crazyflie to connect to
-uri = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E714')
+uri = uri_helper.uri_from_env(default='radio://0/100/2M/E7E7E7E710')
 
 # The name of the rigid body in QTM that represents the Crazyflie
 rigid_body_name = 'cf1'
@@ -111,7 +111,7 @@ spec_time = []
 t_gui_st = 0
 t_gui_end = 0
 thrusts_ = []
-const_thrust = 45500    #43300
+const_thrust = 47000    #43300
 
 data_posvel = pd.DataFrame(columns=['x','y','z','vx','vy','vz'])
 data_real = pd.DataFrame(columns=['roll','pitch','yaw', 'ax', 'ay', 'az'])
@@ -718,7 +718,7 @@ def test_LQR(cf):
     #     commander.send_hover_setpoint(0,0,0,1.3)
     #     time.sleep(0.1)
     x_0 = pos_cb + vel_cb
-    lqr_obj = qualisys_LQR.lqr_controller(x_0, N)
+    # lqr_obj = qualisys_LQR.lqr_controller(x_0, N)
 
     # for i in range(2): 
     #     commander.send_hover_setpoint(0,0,0,1.5)
