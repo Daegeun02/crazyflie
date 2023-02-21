@@ -45,7 +45,7 @@ def guidance_gpu_2(scf, cf, commander):
         optimizer_gpu = class_gpu.ADMM_optimizer_gpu(np.array(x_0_rt), x_des, n_rt*dt, u_ub, n_rt, 0.01, 0.01, 0.01, 0.01, 1500, 3*n_rt)
         acc_cmd = optimizer_gpu.ADMM_opt_gpu(30, 30)  # shape of acc_cmd ; 3X1
 
-        print(acc_cmd)
+        # print(acc_cmd)
 
         if i > n-4:
             print('break 1')
