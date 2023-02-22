@@ -20,7 +20,7 @@ from .optimus_prime import _command_is_not_in_there
 class Commander(Thread):
     
     
-    def __init__(self, scf, dt, command_type='ENU'):
+    def __init__(self, scf, dt, control_type='ENU'):
         ## for threading
         super().__init__()
 
@@ -34,7 +34,7 @@ class Commander(Thread):
         ## flag to start read command
         self.ready_for_command = False
         ## command coord
-        self.control_type = command_type
+        self.control_type = control_type
     
 
     def run(self):
