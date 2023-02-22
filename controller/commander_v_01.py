@@ -3,12 +3,7 @@ from threading import Thread
 
 
 ## define Hz of loop
-from time import sleep, time
-
-
-## memory space
-from numpy import array, zeros
-from numpy.linalg import norm
+from time import sleep
 
 
 ## control loop
@@ -27,10 +22,11 @@ class Commander(Thread):
     
     def __init__(self, scf, dt, command_type='ENU'):
         ## for threading
-        super().__init__(args=(scf,))
+        super().__init__()
 
         ## crazyflie
         self.cf = scf.cf
+        self.cf.command = [0,0,0]       ## basically use ENU control type
         ## time step
         self.dt = dt
         ## memory that restores thrust command
@@ -38,52 +34,45 @@ class Commander(Thread):
         ## flag to start read command
         self.ready_for_command = False
         ## command coord
-        self.command_type = command_type
+        self.control_type = command_type
     
 
     def run(self):
         ## initialize
-        scf,    = self._args
+        cf      = self.cf
+        ## target function -> send setpoint
         target  = None
-        rdfcmd  = self.ready_for_command
-        flying  = False
-        command = [0,0,0]
-        ## 
-        if self.command_type == 'ENU':
+        ## control type
+        if self.control_type == 'ENU':
+            ## control function
             target = self._send_setpoint_ENU
+            ## initialize command
+            cf.command = [0,0,0]
         elif self.command_type == 'RPY':
+            ## control function
             target = self._send_setpoint_RPY
+            ## initialize command
+            cf.command = [0,0,0,0]
         else:
-            raise ValueError('not supported command type')
+            raise ValueError('not supported control type')
 
-        ## start
-        self._init__send_setpoint()
+        print('ready for guidance start')
+    
+        ## wait until start flag on
+        while not self.ready_for_command:
+            sleep(0.1)
 
-        while rdfcmd:
-            
-            if flying:
-                try:
-                    command = scf.mission.pop(0)
-                except:
-                    command = array([0,0,9.81])
+        print('guidance is on, start to send command')
 
-            else:
-                try:
-                    command = scf.mission.pop(0)
-                    flying  = True
-                except:
-                    continue
-
+        ## start flag is on
+        while self.ready_for_command:
+            ## read command
+            command = cf.command
+            ## call control function
             target( command )
 
-
-    def join(self):
-        super().join()
-
-        self._stop_send_setpoint()
-
     
-    def _init__send_setpoint(self):
+    def init__send_setpoint(self):
         ## commander
         commander = self.cf.commander
         ## initialize
@@ -99,7 +88,7 @@ class Commander(Thread):
         commander = cf.commander
         command   = self.command
         ## timestep
-        dt = self.dt / n - 0.005
+        dt = self.dt / n
         ## acceleration current
         euler_cur = cf.euler_pos
         acc_cur   = cf.acc
@@ -157,7 +146,7 @@ class Commander(Thread):
             sleep(dt)
 
 
-    def _stop_send_setpoint(self):
+    def stop_send_setpoint(self):
         ## commander
         commander = self.cf.commander
         ## stop
