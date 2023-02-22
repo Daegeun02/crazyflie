@@ -22,7 +22,7 @@ class Commander(Thread):
     
     def __init__(self, scf, dt, control_type='ENU'):
         ## for threading
-        super().__init__()
+        super().__init__(daemon=True)
 
         ## crazyflie
         self.cf = scf.cf

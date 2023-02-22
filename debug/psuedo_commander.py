@@ -45,6 +45,12 @@ class PsuedoCommander(Thread):
 
             time.sleep(0.1)
 
+    
+    def join(self):
+        super().join()
+
+        print('thread end')
+
         
     def _init(self):
         self.ready_for_command = True
