@@ -22,8 +22,8 @@ class Commander:
     
 
     def __init__(self, scf, dt):
-        self.cf  = scf.cf
-        self.dt  = dt
+        self.cf = scf.cf
+        self.dt = dt
 
         self.thrust = alpha * 9.81
         ## store commands
@@ -31,24 +31,6 @@ class Commander:
 
         self.ready_for_command = False
     
-    
-    def start_record(self):
-        self.acc_rec = []
-        self.acc_cmd = []
-        self.eul_rec = []
-        self.eul_cmd = []
-        self.acc_rec_norm = []
-        self.acc_cmd_norm = []
-
-    
-    def record(self, cf, acc_cmd):
-        acc_cur = cf.rot @ cf.acc
-
-        self.acc_rec.append(acc_cur)
-        self.acc_cmd.append(acc_cmd)
-        self.acc_rec_norm.append(norm(acc_cur))
-        self.acc_cmd_norm.append(norm(acc_cmd))
-
     
     def init_send_setpoint(self):
         ## commander
