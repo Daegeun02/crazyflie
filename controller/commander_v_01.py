@@ -6,6 +6,10 @@ from threading import Thread
 from time import sleep
 
 
+## for copy memory
+from numpy import array
+
+
 ## control loop
 from .acc_att_controller import _dot_thrust
 from .acc_att_controller import _thrust_clip, alpha
@@ -67,7 +71,7 @@ class Commander(Thread):
         ## start flag is on
         while self.ready_for_command:
             ## read command
-            command = cf.command
+            command = array( cf.command )
             ## call control function
             target( command )
 
