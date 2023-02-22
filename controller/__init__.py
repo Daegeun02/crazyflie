@@ -5,7 +5,8 @@
 """
 this class is what you should use
 """
-from .commander import Commander
+from .commander      import Commander
+from .commander_v_01 import Commander as Commander_v_01
 
 from .hl_commander import takeoff, landing, hover
 

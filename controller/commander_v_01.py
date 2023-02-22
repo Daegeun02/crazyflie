@@ -72,7 +72,7 @@ class Commander(Thread):
             target( command )
 
     
-    def init__send_setpoint(self):
+    def init_send_setpoint(self):
         ## commander
         commander = self.cf.commander
         ## initialize

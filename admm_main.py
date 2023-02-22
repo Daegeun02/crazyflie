@@ -9,13 +9,42 @@ from sensor import start
 from sensor import QtmWrapper
 
 from controller import Commander
-from controller import takeoff, landing
+from controller import Commander_v_01
+from controller import takeoff, hover, landing
 
 from admm_gpu_main import guidance_gpu_2
 
 uri1 = uri_helper.uri_from_env(default='radio://0/65/2M/E7E7E7E707')
 
 rigid_body_name = 'cf1'
+
+
+def test_flight_seq1(scf):
+
+    ## test flight
+    commander = Commander(scf, dt=0.1)
+
+    takeoff(scf, commander)
+
+    hover(scf, commander)
+
+    landing(scf, commander)
+
+
+def test_flight_seq2(scf):
+
+    commander = Commander_v_01(scf, dt=0.1)
+
+    commander.start()
+
+    takeoff(scf, commander)
+
+    hover(scf, commander)
+
+    landing(scf, commander)
+
+    commander.join()
+
 
 
 
@@ -33,12 +62,10 @@ if __name__ == "__main__":
         ## wait for start up sensor
         time.sleep(1)
 
-        ## test flight
-        commander = Commander(scf, dt=0.1)
+        test_flight_seq1(scf)
 
-        # takeoff(scf, commander)
-        # landing(scf, commander)
+        # test_flight_seq2(scf)
 
-        guidance_gpu_2(scf, scf.cf, commander)
+        # guidance_gpu_2(scf, scf.cf, commander)
 
     qtm_wrapper.close()
