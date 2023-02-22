@@ -1,15 +1,7 @@
 import cflib.crtp
 from cflib.crazyflie import Crazyflie
-from cflib.crazyflie.log import LogConfig
-from cflib.crazyflie.mem import MemoryElement
-from cflib.crazyflie.mem import Poly4D
 from cflib.crazyflie.syncCrazyflie import SyncCrazyflie
-from cflib.crazyflie.syncLogger import SyncLogger
 from cflib.utils import uri_helper
-from cflib.crtp.crtpstack import CRTPPacket
-
-from qtm import QRTPacket, QRTConnection
-from qtm.packet import QRTComponentType
 
 import time
 
@@ -40,9 +32,6 @@ if __name__ == "__main__":
 
         ## wait for start up sensor
         time.sleep(1)
-
-        ## sensoring debug
-        # sensoring()
 
         ## test flight
         commander = Commander(scf, dt=0.1)
