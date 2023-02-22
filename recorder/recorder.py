@@ -16,6 +16,7 @@ class Recorder(Thread):
         super().__init__(daemon=True)
 
         self.record_length = 0
+        self.recording     = True
 
         ## callback functions
         self.record_callback = {
@@ -50,7 +51,7 @@ class Recorder(Thread):
 
         sleep(0.1)
 
-        while self.record_length < 2000:
+        while self.recording:
 
             for key, callback in self.record_callback.items():
 
@@ -62,6 +63,11 @@ class Recorder(Thread):
             self.record_length += 1
 
             sleep(0.05)
+
+    
+    def stop_record(self):
+
+        self.recording = False
 
 
     def join(self):
