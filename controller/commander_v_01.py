@@ -7,7 +7,7 @@ from time import sleep
 
 
 ## for copy memory
-from numpy import array
+from numpy import array, zeros
 
 
 ## control loop
@@ -26,19 +26,20 @@ class Commander(Thread):
     
     def __init__(self, scf, dt, control_type='ENU'):
         ## for threading
-        super().__init__(daemon=True)
+        super().__init__()
 
         ## crazyflie
         self.cf = scf.cf
-        self.cf.command = [0,0,0]       ## basically use ENU control type
         ## time step
         self.dt = dt
-        ## memory that restores thrust command
+
         self.thrust = alpha * 9.81
-        ## flag to start read command
+        ## memory that restores thrust command
         self.ready_for_command = False
         ## command coord
         self.control_type = control_type
+        ## store commands
+        self.command = zeros(4)
     
 
     def run(self):
@@ -50,13 +51,11 @@ class Commander(Thread):
         if self.control_type == 'ENU':
             ## control function
             target = self._send_setpoint_ENU
-            ## initialize command
-            cf.command = [0,0,0]
         elif self.command_type == 'RPY':
             ## control function
             target = self._send_setpoint_RPY
             ## initialize command
-            cf.command = [0,0,0,0]
+            cf.command = array([0,0,0,0])
         else:
             raise ValueError('not supported control type')
 
@@ -74,6 +73,8 @@ class Commander(Thread):
             command = array( cf.command )
             ## call control function
             target( command )
+
+        print('mission finished')
 
     
     def init_send_setpoint(self):
@@ -110,12 +111,12 @@ class Commander(Thread):
             thrust = _thrust_clip( self.thrust )
 
             ## input
-            # commander.send_setpoint(
-            #     command[0],         ## roll
-            #     command[1],         ## pitch
-            #     command[2],         ## yawRate
-            #     thrust              ## thrust
-            # )
+            commander.send_setpoint(
+                command[0],         ## roll
+                command[1],         ## pitch
+                command[2],         ## yawRate
+                thrust              ## thrust
+            )
 
             sleep(dt)
 
@@ -153,6 +154,8 @@ class Commander(Thread):
     def stop_send_setpoint(self):
         ## commander
         commander = self.cf.commander
-        ## stop
+        ## stop command
+        self.cf.command[:] = zeros(3)
+        ## stop signal
         self.ready_for_command = False
         commander.send_stop_setpoint()

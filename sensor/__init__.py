@@ -19,7 +19,10 @@ def setup(cf):
     cf.posvel = zeros(6)
     cf.acc = zeros(3)
 
+    cf.command = zeros(3)
+
     cf.euler_pos = zeros(3)
+    cf.euler_pos_imu = zeros(3)
 
     cf.rot = eye(3)
 
@@ -34,6 +37,7 @@ def start(scf, qtm_wrapper):
     ## IMU
     imu = IMU(scf)
     imu.start_get_acc()
+    imu.start_get_euler_vel()
 
     ## qualisys beacon
     qtm_wrapper.on_pose = lambda pose: SendPose.send_extpose( cf, pose )

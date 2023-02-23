@@ -11,12 +11,14 @@ from .visualizer import *
 class Recorder(Thread):
 
 
-    def __init__(self, cf, n=2000):
+    def __init__(self, scf, commander, n=10000):
         ## for threading
-        super().__init__(daemon=True)
+        super().__init__()
 
         self.record_length = 0
         self.recording     = True
+
+        cf = scf.cf
 
         ## callback functions
         self.record_callback = {
@@ -25,16 +27,20 @@ class Recorder(Thread):
             'pos'   : array_type_data_callback,
             'cmd'   : array_type_data_callback,
             'att'   : array_type_data_callback,
+            'attimu': array_type_data_callback,
+            'attcmd': array_type_data_callback,
             'thrust': float_type_data_callback
         }
         ## data storage
         self.record_datastrg = {
-            'acc'   : zeros(3,n),
-            'vel'   : zeros(3,n),
-            'pos'   : zeros(3,n),
-            'cmd'   : zeros(3,n),
-            'att'   : zeros(3,n),
-            'thrust': zeros(1,n)
+            'acc'   : zeros((3,n)),
+            'vel'   : zeros((3,n)),
+            'pos'   : zeros((3,n)),
+            'cmd'   : zeros((3,n)),
+            'att'   : zeros((3,n)),
+            'attimu': zeros((3,n)),
+            'attcmd': zeros((4,n)),
+            'thrust': zeros((1,n))
         }
         ## realtime data
         self.realtime_data = {
@@ -43,7 +49,9 @@ class Recorder(Thread):
             'pos'   : cf.posvel[:3],
             'cmd'   : cf.command,
             'att'   : cf.euler_pos,
-            'thrust': 0
+            'attimu': cf.euler_pos_imu,
+            'attcmd': commander.command,
+            'thrust': commander.thrust
         }
 
     
@@ -70,24 +78,6 @@ class Recorder(Thread):
         self.recording = False
 
 
-    def join(self):
-
-        super().join()
-
-        _len = self.record_length
-
-        acc    = self.record_datastrg['acc']
-        vel    = self.record_datastrg['vel']
-        pos    = self.record_datastrg['pos']
-        cmd    = self.record_datastrg['cmd']
-        att    = self.record_datastrg['att']
-        thrust = self.record_datastrg['thrust']
-
-        plot_acc_pos_cmd(acc, pos, cmd, _len)
-        plot_thrust(thrust, _len)
-        plot_vel(vel, _len)
-
-
 def array_type_data_callback(datastrg, data, i):
 
     datastrg[:,i] = array(data)
@@ -95,4 +85,4 @@ def array_type_data_callback(datastrg, data, i):
 
 def float_type_data_callback(datastrg, data, i):
 
-    datastrg[i] = int(data)
+    datastrg[0,i] = int(data)

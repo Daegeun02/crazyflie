@@ -71,7 +71,7 @@ import scipy.sparse.linalg as sla
 import class_gpu 
 
 # URI to the Crazyflie to connect to
-uri = uri_helper.uri_from_env(default='radio://0/100/2M/E7E7E7E710')
+uri = uri_helper.uri_from_env(default='radio://0/65/2M/E7E7E7E707')
 
 # The name of the rigid body in QTM that represents the Crazyflie
 rigid_body_name = 'cf1'
@@ -699,75 +699,75 @@ def guidance_gpu_2(cf):
     #     if i != 4:
     #         time.sleep(0.5)
 
-def test_LQR(cf):
+# def test_LQR(cf):
 
-    commander = cf.commander
-    # commander.send_hover_setpoint(0,0,0,1.5)
-    # time.sleep(2)
-    # commander.send_hover_setpoint(0,0,0,1.5)
-    # time.sleep(0.5)
+#     commander = cf.commander
+#     # commander.send_hover_setpoint(0,0,0,1.5)
+#     # time.sleep(2)
+#     # commander.send_hover_setpoint(0,0,0,1.5)
+#     # time.sleep(0.5)
 
-    # test_z(cf, commander, 1,1,1.5, flight_mode='up')
-    dt = 0.1  # --> time step : 0~ 99
-    N = 100  
-    # x_0 = [1,1,1.5,0,0,0]
+#     # test_z(cf, commander, 1,1,1.5, flight_mode='up')
+#     dt = 0.1  # --> time step : 0~ 99
+#     N = 100  
+#     # x_0 = [1,1,1.5,0,0,0]
 
-    commander.send_hover_setpoint(0,0,0,1.3)
-    time.sleep(2)
-    # for i in range(30):
-    #     commander.send_hover_setpoint(0,0,0,1.3)
-    #     time.sleep(0.1)
-    x_0 = pos_cb + vel_cb
-    # lqr_obj = qualisys_LQR.lqr_controller(x_0, N)
+#     commander.send_hover_setpoint(0,0,0,1.3)
+#     time.sleep(2)
+#     # for i in range(30):
+#     #     commander.send_hover_setpoint(0,0,0,1.3)
+#     #     time.sleep(0.1)
+#     x_0 = pos_cb + vel_cb
+#     # lqr_obj = qualisys_LQR.lqr_controller(x_0, N)
 
-    # for i in range(2): 
-    #     commander.send_hover_setpoint(0,0,0,1.5)
-    #     time.sleep(1.5)
-    # commander.send_hover_setpoint(0,0,0,1.5)
-    # time.sleep(2)
-    # for i in range(100):
-    #     commander.send_hover_setpoint(0,0,0,1.5)
-    #     time.sleep(0.1)
-    commander.send_setpoint(0, 0, 0, 0)
+#     # for i in range(2): 
+#     #     commander.send_hover_setpoint(0,0,0,1.5)
+#     #     time.sleep(1.5)
+#     # commander.send_hover_setpoint(0,0,0,1.5)
+#     # time.sleep(2)
+#     # for i in range(100):
+#     #     commander.send_hover_setpoint(0,0,0,1.5)
+#     #     time.sleep(0.1)
+#     commander.send_setpoint(0, 0, 0, 0)
 
-    for i in range(N):
-        dt = 0.1
-        # t_go = lg.norm(pos_cb)/(lg.norm(vel_cb))   # time to go
+#     for i in range(N):
+#         dt = 0.1
+#         # t_go = lg.norm(pos_cb)/(lg.norm(vel_cb))   # time to go
         
-        # time_step = int(t_go/dt)    # step to go 
-        time_step = N-1 - i
-        x = pos_cb + vel_cb
-        x = np.array(x)
-        x[2] = x[2] - 0.2
-        idx_step = (N - 1) - time_step   # ex) 100 --> 0
-        u = lqr_obj.K[:,6*idx_step:6*idx_step+6]@x[:,np.newaxis] + lqr_obj.L[:,idx_step:idx_step+1]
-        print(i, pos_cb, u)
-        roll_ =  -math.degrees(np.arctan2(u[1], u[2]))
-        pitch_ = math.degrees(np.arctan2(u[0],  u[2]))
-        yawRate_ = 0.02*math.degrees(euler_cb[2])
-        thrust = int(10001 + ((const_thrust-10001)/9.81) * lg.norm(u))
-        # thrust = 60000 if thrust > 60000 else ()
-        if thrust > 60000:
-            thrust = 60000
-        if thrust < 10001:
-            thrust = 10001
-        commander.send_setpoint(roll_, pitch_,yawRate_, thrust)
-        time.sleep(0.1)
-        if pos_cb[2] <= 0.2:    #0.05
-            print("--------------------",i)
-            # commander.send_stop_setpoint()
-            break
-    for i in range(100):
-        thrust = thrust - 750
-        if thrust < 10001:
-            thrust = 10001
-        commander.send_setpoint(0,0,0, thrust)
-        time.sleep(0.1)
-        if pos_cb[2] <= 0.03 or thrust==10001:    #0.05
-            commander.send_stop_setpoint()
-            break
+#         # time_step = int(t_go/dt)    # step to go 
+#         time_step = N-1 - i
+#         x = pos_cb + vel_cb
+#         x = np.array(x)
+#         x[2] = x[2] - 0.2
+#         idx_step = (N - 1) - time_step   # ex) 100 --> 0
+#         u = lqr_obj.K[:,6*idx_step:6*idx_step+6]@x[:,np.newaxis] + lqr_obj.L[:,idx_step:idx_step+1]
+#         print(i, pos_cb, u)
+#         roll_ =  -math.degrees(np.arctan2(u[1], u[2]))
+#         pitch_ = math.degrees(np.arctan2(u[0],  u[2]))
+#         yawRate_ = 0.02*math.degrees(euler_cb[2])
+#         thrust = int(10001 + ((const_thrust-10001)/9.81) * lg.norm(u))
+#         # thrust = 60000 if thrust > 60000 else ()
+#         if thrust > 60000:
+#             thrust = 60000
+#         if thrust < 10001:
+#             thrust = 10001
+#         commander.send_setpoint(roll_, pitch_,yawRate_, thrust)
+#         time.sleep(0.1)
+#         if pos_cb[2] <= 0.2:    #0.05
+#             print("--------------------",i)
+#             # commander.send_stop_setpoint()
+#             break
+#     for i in range(100):
+#         thrust = thrust - 750
+#         if thrust < 10001:
+#             thrust = 10001
+#         commander.send_setpoint(0,0,0, thrust)
+#         time.sleep(0.1)
+#         if pos_cb[2] <= 0.03 or thrust==10001:    #0.05
+#             commander.send_stop_setpoint()
+#             break
 
-    commander.send_stop_setpoint()
+#     commander.send_stop_setpoint()
 
 
 if __name__ == '__main__':

@@ -35,9 +35,9 @@ class IMU:
 
     def start_get_euler_vel(self, period_in_ms=period_in_ms):
         log_conf = LogConfig(name='Euler_angle_velocity', period_in_ms=period_in_ms)
-        log_conf.add_variable('gyro.x', 'FP16')     ## deg/s
-        log_conf.add_variable('gyro.y', 'FP16')     ## deg/s
-        log_conf.add_variable('gyro.z', 'FP16')     ## deg/s
+        log_conf.add_variable('stateEstimate.roll', 'FP16')     ## deg/s
+        log_conf.add_variable('stateEstimate.pitch', 'FP16')     ## deg/s
+        log_conf.add_variable('stateEstimate.yaw', 'FP16')     ## deg/s
 
         self.scf.cf.log.add_config(log_conf)
         log_conf.data_received_cb.add_callback(self.eulervel_callback)
@@ -58,6 +58,10 @@ class IMU:
 
     
     def eulervel_callback(self, timestamp, data, logconf):
-        self.cf.euler_vel[0] = data['gyro.x']
-        self.cf.euler_vel[1] = data['gyro.y']
-        self.cf.euler_vel[2] = data['gyro.z']
+        # self.cf.euler_vel[0] = data['gyro.x']
+        # self.cf.euler_vel[1] = data['gyro.y']
+        # self.cf.euler_vel[2] = data['gyro.z']
+
+        self.cf.euler_pos_imu[0] = data['stateEstimate.roll']
+        self.cf.euler_pos_imu[1] = data['stateEstimate.pitch']
+        self.cf.euler_pos_imu[2] = data['stateEstimate.yaw']

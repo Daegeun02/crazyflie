@@ -14,7 +14,6 @@ K_T = alpha * Kp
 def _dot_thrust(command, acc_cur):
     ## difference
     dot_acc = command[3] - norm( acc_cur )
-    print(dot_acc)
     ## command
     dot_thr = K_T * dot_acc
     ## return
