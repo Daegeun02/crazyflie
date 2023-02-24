@@ -4,7 +4,7 @@ import numpy.linalg as lg
 
 import class_gpu
 
-from controller import takeoff_v_01, hover_v_01
+from controller import takeoff, hover
 
 import time
 
@@ -26,9 +26,9 @@ def guidance_gpu_2(scf, cf, commander):
     del optimizer_gpu
     mempool.free_all_blocks()
 
-    takeoff_v_01(scf, commander)
+    takeoff(scf, commander)
 
-    hover_v_01(scf, commander, T=3)
+    hover(scf, commander, T=3)
 
     # dt = 0.25
     # n = 40  #0~1000

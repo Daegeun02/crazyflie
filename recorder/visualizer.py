@@ -46,7 +46,7 @@ def plot_thrust(thrust, _len):
 
     plt.figure(figsize=(8,8))
 
-    plt.plot(thrust[0,:_len], label='realtime thrust')
+    plt.plot(thrust[:_len], label='realtime thrust')
 
     plt.legend()
     plt.grid()

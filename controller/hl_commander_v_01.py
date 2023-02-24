@@ -9,11 +9,13 @@ from numpy.linalg import norm
 from time import sleep
 
 Kp = array([4.000,4.000,2.000])
-Kd = array([2.700,2.700,2.100])
+Kd = array([2.800,2.800,2.100])
 
 
 
 def takeoff(scf, commander, T=3, dt=0.1):
+
+    print('takeoff')
 
     cf = scf.cf
 
@@ -46,6 +48,8 @@ def takeoff(scf, commander, T=3, dt=0.1):
     
 def hover(scf, commander, T, dt=0.1):
 
+    print('hover')
+
     cf = scf.cf
 
     T = arange(0, T, dt)
@@ -55,8 +59,37 @@ def hover(scf, commander, T, dt=0.1):
 
     des = array(posvel[:3])
 
-    for k in range(n):
+    for _ in range(n):
         P_pos = des - posvel[:3]
+        D_pos = posvel[3:]
+
+        ## PD loop
+        acc_cmd = 0
+        acc_cmd += P_pos * Kp
+        acc_cmd -= D_pos * Kd
+        acc_cmd += [0,0,9.81]
+
+        cf.command[:] = acc_cmd
+
+        sleep(0.1)
+
+    
+def goto(scf, des, commander, T=3, dt=0.1):
+
+    print('goto')
+
+    cf = scf.cf
+
+    T = arange(0, T, dt)
+    n = len(T)
+
+    posvel = cf.posvel
+
+    cur = array(posvel[:3])
+
+    for k in range(n):
+        pos_cmd = smooth_command(des, cur, T[k], 2.5)
+        P_pos = pos_cmd - posvel[:3]
         D_pos = posvel[3:]
 
         ## PD loop
@@ -72,6 +105,8 @@ def hover(scf, commander, T, dt=0.1):
 
 def landing(scf, commander, T=3, dt=0.1):
 
+    print('landing')
+
     cf = scf.cf
 
     T = arange(0, T, dt)
@@ -83,7 +118,7 @@ def landing(scf, commander, T=3, dt=0.1):
     des = array([cur[0],cur[1],0])
 
     for k in range(n):
-        pos_cmd = smooth_command(des, cur, T[k], 2)
+        pos_cmd = smooth_command(des, cur, T[k], 2.5)
         P_pos   = pos_cmd - posvel[:3]
         D_pos   = posvel[3:]
 

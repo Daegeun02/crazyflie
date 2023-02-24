@@ -5,13 +5,13 @@
 """
 this class is what you should use
 """
-from .commander      import Commander
-from .commander_v_01 import Commander as Commander_v_01
+from .commander_v_01 import Commander
+# from .commander_v_01 import Commander as Commander_v_01
 
-from .hl_commander      import takeoff, landing, hover
-from .hl_commander_v_01 import takeoff as takeoff_v_01
-from .hl_commander_v_01 import landing as landing_v_01
-from .hl_commander_v_01 import hover   as hover_v_01
+from .hl_commander_v_01 import takeoff, landing, hover, goto
+# from .hl_commander_v_01 import takeoff as takeoff_v_01
+# from .hl_commander_v_01 import landing as landing_v_01
+# from .hl_commander_v_01 import hover   as hover_v_01
 
 
 ## optimus prime

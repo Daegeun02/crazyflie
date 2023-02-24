@@ -5,20 +5,20 @@ from cflib.utils import uri_helper
 
 from time import sleep
 
+from numpy import array
+
 from sensor import start
 from sensor import QtmWrapper
 
 from controller import Commander
-from controller import Commander_v_01
-from controller import takeoff, hover, landing
-from controller import takeoff_v_01, hover_v_01, landing_v_01
+from controller import takeoff, hover, landing, goto
 
 from recorder import Recorder
 from recorder import plot_acc_pos_cmd, plot_thrust, plot_vel, plot_att
 
 from admm_gpu_main import guidance_gpu_2
 
-uri1 = uri_helper.uri_from_env(default='radio://0/80/2M/E7E7E7E705')
+uri1 = uri_helper.uri_from_env(default='radio://0/65/2M/E7E7E7E707')
 
 rigid_body_name = 'cf1'
 
@@ -37,11 +37,11 @@ def test_flight_seq1(scf):
 
 def test_flight_seq2(scf):
 
-    commander = Commander_v_01(scf, dt=0.1)
+    commander = Commander(scf, dt=0.1)
 
     commander.daemon = True
 
-    recorder = Recorder(scf)
+    recorder = Recorder(scf, commander)
     
     recorder.daemon = True
 
@@ -49,29 +49,21 @@ def test_flight_seq2(scf):
 
     recorder.start()
 
-    takeoff_v_01(scf, commander)
+    takeoff(scf, commander)
 
-    hover_v_01(scf, commander, T=3)
+    hover(scf, commander, T=3)
 
-    landing_v_01(scf, commander)
+    goto(scf, array([1,1,1.5]), commander)
+
+    landing(scf, commander)
 
     recorder.stop_record()
 
     commander.join()
 
+    sleep(1)
+
     recorder.join()
-
-    _len = recorder.record_length
-
-    acc    = recorder.record_datastrg['acc']
-    vel    = recorder.record_datastrg['vel']
-    pos    = recorder.record_datastrg['pos']
-    cmd    = recorder.record_datastrg['cmd']
-    att    = recorder.record_datastrg['att']
-    thrust = recorder.record_datastrg['thrust']
-
-    plot_acc_pos_cmd(acc, pos, cmd, _len)
-    plot_thrust(thrust, _len)
 
 
 
@@ -92,43 +84,28 @@ if __name__ == "__main__":
 
         # test_flight_seq1(scf)
 
-        # test_flight_seq2(scf)
+        test_flight_seq2(scf)
 
-        commander = Commander_v_01(scf, dt=0.1)
+        # commander = Commander(scf, dt=0.1)
 
-        commander.daemon = True
+        # commander.daemon = True
 
-        recorder = Recorder(scf, commander)
+        # recorder = Recorder(scf, commander)
         
-        recorder.daemon = True
+        # recorder.daemon = True
 
-        commander.start()
+        # commander.start()
 
-        recorder.start()
+        # recorder.start()
 
-        guidance_gpu_2(scf, scf.cf, commander)
+        # guidance_gpu_2(scf, scf.cf, commander)
 
-        commander.join()
+        # commander.join()
 
-        sleep(1)
+        # sleep(1)
         
-        recorder.stop_record()
+        # recorder.stop_record()
 
-        recorder.join()
-
-        _len = recorder.record_length
-
-        acc    = recorder.record_datastrg['acc']
-        vel    = recorder.record_datastrg['vel']
-        pos    = recorder.record_datastrg['pos']
-        cmd    = recorder.record_datastrg['cmd']
-        att    = recorder.record_datastrg['att']
-        attimu = recorder.record_datastrg['attimu']
-        attcmd = recorder.record_datastrg['attcmd']
-        thrust = recorder.record_datastrg['thrust']
-
-        plot_acc_pos_cmd(acc, pos, cmd, _len)
-        plot_thrust(thrust, _len)
-        plot_att(att, attimu, attcmd, _len)
+        # recorder.join()
 
     qtm_wrapper.close()
