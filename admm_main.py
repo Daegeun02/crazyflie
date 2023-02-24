@@ -15,6 +15,8 @@ from controller import takeoff, hover, landing, goto
 
 from recorder import Recorder
 
+from estimator import Estimator
+
 from admm_gpu_main import guidance_gpu_2
 
 uri1 = uri_helper.uri_from_env(default='radio://0/65/2M/E7E7E7E707')
@@ -42,8 +44,12 @@ def test_flight_seq2(scf):
     recorder = Recorder(scf, commander)     ## record flight data
     recorder.daemon = True                  ## it must stop when guidance is done
 
+    estimator = Estimator(scf)              ## estimate ideal posvel
+    estimator.daemon = True                 ## it must stop when guidance is done
+
     commander.start()                       ## thread start
     recorder.start()                        ## thread start
+    estimator.start()                       ## thread start
 
     takeoff(scf, commander)
 
@@ -55,11 +61,15 @@ def test_flight_seq2(scf):
 
     recorder.stop_record()
 
+    estimator.stop_estimate()
+
     commander.join()
 
     sleep(1)
 
     recorder.join()
+
+    estimator.join()
 
 
 

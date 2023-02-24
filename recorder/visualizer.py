@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 
 
-def plot_acc_pos_cmd(acc, vel, pos, acccmd, _len):
+def plot_acc_pos_cmd(acc, acccmd, vel, velest, pos, posest, _len):
 
     plt.figure(figsize=(14,14))
 
@@ -27,31 +27,37 @@ def plot_acc_pos_cmd(acc, vel, pos, acccmd, _len):
     ## velocity is reversed
     plt.subplot(334)
     plt.plot(vel[0,:_len], label='realtime velocity x')
+    plt.plot(velest[0,:_len], label='estimated velocity x')
     plt.legend()
     plt.grid()
 
     plt.subplot(335)
     plt.plot(vel[1,:_len], label='realtime velocity y')
+    plt.plot(velest[1,:_len], label='estimated velocity y')
     plt.legend()
     plt.grid()
 
     plt.subplot(336)
     plt.plot(vel[2,:_len], label='realtime velocity z')
+    plt.plot(velest[2,:_len], label='estimated velocity z')
     plt.legend()
     plt.grid()
 
     plt.subplot(337)
     plt.plot(pos[0,:_len], label='realtime position x')
+    plt.plot(posest[0,:_len], label='estimated position x')
     plt.legend()
     plt.grid()
 
     plt.subplot(338)
     plt.plot(pos[1,:_len], label='realtime position y')
+    plt.plot(posest[1,:_len], label='estimated position y')
     plt.legend()
     plt.grid()
 
     plt.subplot(339)
     plt.plot(pos[2,:_len], label='realtime position z')
+    plt.plot(posest[2,:_len], label='estimated position z')
     plt.legend()
     plt.grid()
 

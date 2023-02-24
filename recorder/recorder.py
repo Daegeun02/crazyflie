@@ -13,7 +13,7 @@ from .visualizer import *
 class Recorder(Thread):
 
 
-    def __init__(self, scf, commander, n=10000):
+    def __init__(self, scf, commander, estimator, n=10000):
         ## for threading
         super().__init__()
 
@@ -26,9 +26,11 @@ class Recorder(Thread):
         ## callback functions
         self.record_callback = {
             # acc'   : array_type_data_callback,
-            'vel'   : array_type_data_callback,
-            'pos'   : array_type_data_callback,
             'acccmd': array_type_data_callback,
+            'vel'   : array_type_data_callback,
+            'velest': array_type_data_callback,
+            'pos'   : array_type_data_callback,
+            'posest': array_type_data_callback,
             'att'   : array_type_data_callback,
             'cmd'   : array_type_data_callback,
             'thrust': float_type_data_callback
@@ -36,9 +38,11 @@ class Recorder(Thread):
         ## data storage
         self.record_datastrg = {
             'acc'   : zeros((3,n)),
-            'vel'   : zeros((3,n)),
-            'pos'   : zeros((3,n)),
             'acccmd': zeros((3,n)),
+            'vel'   : zeros((3,n)),
+            'velest': zeros((3,n)),
+            'pos'   : zeros((3,n)),
+            'posest': zeros((3,n)),
             'att'   : zeros((3,n)),
             'cmd'   : zeros((4,n)),
             'thrust': zeros((1,n))
@@ -46,9 +50,11 @@ class Recorder(Thread):
         ## realtime data
         self.realtime_data = {
             'acc'   : cf.acc,
-            'vel'   : cf.posvel[3:],
-            'pos'   : cf.posvel[:3],
             'acccmd': cf.command,
+            'vel'   : cf.posvel[3:],
+            'velest': estimator.posvel[3:],
+            'pos'   : cf.posvel[:3],
+            'posest': estimator.posvel[:3],
             'att'   : cf.euler_pos,
             'cmd'   : commander.command,
             'thrust': commander.thrust
@@ -87,14 +93,19 @@ class Recorder(Thread):
         _len = self.record_length
 
         acc    = self.record_datastrg['acc']
-        vel    = self.record_datastrg['vel']
-        pos    = self.record_datastrg['pos']
         acccmd = self.record_datastrg['acccmd']
+
+        vel    = self.record_datastrg['vel']
+        velest = self.record_datastrg['velest']
+
+        pos    = self.record_datastrg['pos']
+        posest = self.record_datastrg['posest']
+
         att    = self.record_datastrg['att']
         cmd    = self.record_datastrg['cmd'] * array([1,1,1,alpha])
         thrust = self.record_datastrg['thrust']
 
-        plot_acc_pos_cmd(acc, vel, pos, acccmd, _len)
+        plot_acc_pos_cmd(acc, acccmd, vel, velest, pos, posest, _len)
         plot_thrust(thrust[0,:], cmd[3,:], _len)
         plot_att(att, cmd[:3,:], _len)
 
