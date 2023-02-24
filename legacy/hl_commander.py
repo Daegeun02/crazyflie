@@ -1,7 +1,7 @@
 ## high level commander
 ## support takeoff, landing automatically and so on
 
-from .acc_att_controller import smooth_command
+from ..controller.acc_att_controller import smooth_command
 
 from numpy        import array, arange, clip
 from numpy.linalg import norm

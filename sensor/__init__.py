@@ -14,16 +14,15 @@ def setup(cf):
     reset_estimator(cf)
 
     ## memory space
-    cf.posvel     = zeros(6)
-    cf.posvel_imu = zeros(6)
+    cf.posvel    = zeros(6)
+    cf.euler_pos = zeros(3)
 
     cf.acc = zeros(3)
-    cf.acc_imu = ones(3)
 
     cf.command = zeros(3)
 
-    cf.euler_pos     = zeros(3)
-    cf.euler_pos_imu = zeros(3)
+    # cf.posvel_imu = zeros(6)
+    # cf.euler_pos_imu = zeros(3)
 
     cf.rot = eye(3)
 
@@ -37,10 +36,10 @@ def start(scf, qtm_wrapper):
 
     ## IMU
     imu = IMU(scf)
-    imu.start_get_pos()
-    imu.start_get_vel()
     imu.start_get_acc()
-    imu.start_get_euler_vel()
+    imu.start_get_vel()
+    # imu.start_get_pos()
+    # imu.start_get_euler_vel()
 
     ## qualisys beacon
     qtm_wrapper.on_pose = lambda pose: SendPose.send_extpose( cf, pose )

@@ -38,9 +38,6 @@ class IMU:
         log_conf.add_variable('acc.x', 'FP16')      ## m/s^2
         log_conf.add_variable('acc.y', 'FP16')      ## m/s^2
         log_conf.add_variable('acc.z', 'FP16')      ## m/s^2
-        # log_conf.add_variable('stateEstimate.ax', 'FP16')
-        # log_conf.add_variable('stateEstimate.ay', 'FP16')
-        # log_conf.add_variable('stateEstimate.az', 'FP16')
 
         self.scf.cf.log.add_config(log_conf)
         log_conf.data_received_cb.add_callback(self.accelerate_callback)
@@ -75,9 +72,6 @@ class IMU:
         self.cf.acc[0] = data['acc.x'] * 9.81
         self.cf.acc[1] = data['acc.y'] * 9.81
         self.cf.acc[2] = data['acc.z'] * 9.81
-        # self.cf.acc_imu[0] = data['stateEstimate.ax'] * 9.81
-        # self.cf.acc_imu[1] = data['stateEstimate.ay'] * 9.81
-        # self.cf.acc_imu[2] = data['stateEstimate.az'] * 9.81 + 9.81
 
     
     def eulervel_callback(self, timestamp, data, logconf):

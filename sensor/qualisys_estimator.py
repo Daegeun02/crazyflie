@@ -118,7 +118,12 @@ class QtmWrapper(Thread):
 
 class SendPose:
 
-    pre_t = 0
+    # pre_t = 0
+    # pre_t = cls.pre_t
+    # cur_t = time()
+    # dt    = cur_t - pre_t
+    # cls.pre_t = cur_t
+
 
     @classmethod
     def send_extpose(cls, cf, pose):
@@ -134,15 +139,6 @@ class SendPose:
 
     @classmethod
     def send_pose(cls, cf, x, y, z, R, P, Y, rot):
-        pre_t = cls.pre_t
-        cur_t = time()
-        dt    = cur_t - pre_t
-        cls.pre_t = cur_t
-
-        cf.posvel_imu[3] = (x - cf.posvel[0]) / dt
-        cf.posvel_imu[4] = (y - cf.posvel[1]) / dt
-        cf.posvel_imu[5] = (z - cf.posvel[2]) / dt
-
         cf.posvel[0] = x 
         cf.posvel[1] = y 
         cf.posvel[2] = z
@@ -158,15 +154,6 @@ class SendPose:
     
     @classmethod
     def send_pos(cls, cf, x, y, z, R, P, Y):
-        pre_t = cls.pre_t
-        cur_t = time()
-        dt    = cur_t - pre_t
-        cls.pre_t = cur_t
-
-        cf.posvel_imu[3] = (x - cf.posvel[0]) / dt
-        cf.posvel_imu[4] = (y - cf.posvel[1]) / dt
-        cf.posvel_imu[5] = (z - cf.posvel[2]) / dt
-
         cf.posvel[0] = x 
         cf.posvel[1] = y 
         cf.posvel[2] = z

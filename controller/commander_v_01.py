@@ -33,7 +33,7 @@ class Commander(Thread):
         ## time step
         self.dt = dt
 
-        self.thrust = alpha * 9.81
+        self.thrust = array([alpha * 9.81])
         ## memory that restores thrust command
         self.ready_for_command = False
         ## command coord
@@ -92,6 +92,7 @@ class Commander(Thread):
         ## commander
         commander = cf.commander
         command   = self.command
+        thrust    = self.thrust
         ## timestep
         dt = self.dt / n
         ## acceleration current
@@ -105,17 +106,17 @@ class Commander(Thread):
         for _ in range(n):
 
             ## closed loop
-            self.thrust += _dot_thrust( command, acc_cur )
+            thrust[0] += _dot_thrust( command, acc_cur )
             
             ## cliping
-            thrust = _thrust_clip( self.thrust )
+            thrust[0] = _thrust_clip( thrust[0] )
 
             ## input
             # commander.send_setpoint(
             #     command[0],         ## roll
             #     command[1],         ## pitch
             #     command[2],         ## yawRate
-            #     thrust              ## thrust
+            #     thrust[0]           ## thrust
             # )
 
             sleep(dt)

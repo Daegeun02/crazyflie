@@ -8,13 +8,13 @@ from numpy.linalg import norm
 
 
 ## control loop
-from .acc_att_controller import _dot_thrust
-from .acc_att_controller import _thrust_clip, alpha
+from ..controller.acc_att_controller import _dot_thrust
+from ..controller.acc_att_controller import _thrust_clip, alpha
 
 
 ## transformer
-from .optimus_prime import _command_as_ENU, _command_as_RPY
-from .optimus_prime import _command_is_not_in_there
+from ..controller.optimus_prime import _command_as_ENU, _command_as_RPY
+from ..controller.optimus_prime import _command_is_not_in_there
 
 
 

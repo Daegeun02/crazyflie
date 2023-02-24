@@ -2,27 +2,24 @@ import matplotlib.pyplot as plt
 
 
 
-def plot_acc_pos_cmd(acc, accimu, vel, velimu, pos, posimu, acccmd, _len):
+def plot_acc_pos_cmd(acc, vel, pos, acccmd, _len):
 
     plt.figure(figsize=(14,14))
 
     plt.subplot(331)
     plt.plot(acc[0,:_len], label='realtime acceleration x')
-    plt.plot(accimu[0,:_len], label='realtime acceleration from imu x')
     plt.plot(acccmd[0,:_len], label='command input x')
     plt.legend()
     plt.grid()
 
     plt.subplot(332)
     plt.plot(acc[1,:_len], label='realtime acceleration y')
-    plt.plot(accimu[1,:_len], label='realtime acceleration from imu y')
     plt.plot(acccmd[1,:_len], label='command input y')
     plt.legend()
     plt.grid()
 
     plt.subplot(333)
     plt.plot(acc[2,:_len], label='realtime acceleration z')
-    plt.plot(accimu[2,:_len], label='realtime acceleration from imu z')
     plt.plot(acccmd[2,:_len], label='command input z')
     plt.legend()
     plt.grid()
@@ -30,48 +27,43 @@ def plot_acc_pos_cmd(acc, accimu, vel, velimu, pos, posimu, acccmd, _len):
     ## velocity is reversed
     plt.subplot(334)
     plt.plot(vel[0,:_len], label='realtime velocity x')
-    plt.plot(velimu[0,:_len], label='realtime velocity from qtm x')
     plt.legend()
     plt.grid()
 
     plt.subplot(335)
     plt.plot(vel[1,:_len], label='realtime velocity y')
-    plt.plot(velimu[1,:_len], label='realtime velocity from qtm y')
     plt.legend()
     plt.grid()
 
     plt.subplot(336)
     plt.plot(vel[2,:_len], label='realtime velocity z')
-    plt.plot(velimu[2,:_len], label='realtime velocity from qtm z')
     plt.legend()
     plt.grid()
 
     plt.subplot(337)
     plt.plot(pos[0,:_len], label='realtime position x')
-    plt.plot(posimu[0,:_len], label='realtime position from imu x')
     plt.legend()
     plt.grid()
 
     plt.subplot(338)
     plt.plot(pos[1,:_len], label='realtime position y')
-    plt.plot(posimu[1,:_len], label='realtime position from imu y')
     plt.legend()
     plt.grid()
 
     plt.subplot(339)
     plt.plot(pos[2,:_len], label='realtime position z')
-    plt.plot(posimu[2,:_len], label='realtime position from imu z')
     plt.legend()
     plt.grid()
 
     plt.show()
 
 
-def plot_thrust(thrust, _len):
+def plot_thrust(thrust, thrustcmd, _len):
 
     plt.figure(figsize=(8,8))
 
     plt.plot(thrust[:_len], label='realtime thrust')
+    plt.plot(thrustcmd[:_len], label='reference thrust')
 
     plt.legend()
     plt.grid()
@@ -79,39 +71,24 @@ def plot_thrust(thrust, _len):
     plt.show()
 
 
-def plot_vel(vel, _len):
+def plot_att(att, attcmd, _len):
 
-    plt.figure(figsize=(8,8))
-
-    plt.plot(vel[0,:_len], label='realtime velocity x')
-    plt.plot(vel[1,:_len], label='realtime velocity y')
-    plt.plot(vel[2,:_len], label='realtime velocity z')
-
-    plt.legend()
-    plt.grid()
-
-    plt.show()
-
-
-def plot_att(att, attimu, attcmd, _len):
+    plt.figure(figsize=(14,14))
     
     plt.subplot(311)
     plt.plot(att[0,:_len], label='realtime euler x')
-    plt.plot(attimu[0,:_len], label='realtime euler from imu x')
     plt.plot(attcmd[0,:_len], label='realtime euler input x')
     plt.legend()
     plt.grid()
 
     plt.subplot(312)
     plt.plot(att[1,:_len], label='realtime euler y')
-    plt.plot(attimu[1,:_len], label='realtime euler from imu y')
     plt.plot(attcmd[1,:_len], label='realtime euler input y')
     plt.legend()
     plt.grid()
 
     plt.subplot(313)
     plt.plot(att[2,:_len], label='realtime euler z')
-    plt.plot(attimu[2,:_len], label='realtime euler from imu z')
     plt.plot(attcmd[2,:_len], label='realtime euler input z')
     plt.legend()
     plt.grid()

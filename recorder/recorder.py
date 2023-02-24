@@ -4,6 +4,8 @@ from numpy import zeros, array
 
 from time  import sleep
 
+from controller import alpha
+
 from .visualizer import *
 
 
@@ -23,42 +25,33 @@ class Recorder(Thread):
 
         ## callback functions
         self.record_callback = {
-            'acc'   : array_type_data_callback,
-            'accimu': array_type_data_callback,
+            # acc'   : array_type_data_callback,
             'vel'   : array_type_data_callback,
-            'velimu': array_type_data_callback,
             'pos'   : array_type_data_callback,
-            'posimu': array_type_data_callback,
-            # 'acccmd': array_type_data_callback,
+            'acccmd': array_type_data_callback,
             'att'   : array_type_data_callback,
-            'attimu': array_type_data_callback,
-            'cmd'   : array_type_data_callback
+            'cmd'   : array_type_data_callback,
+            'thrust': float_type_data_callback
         }
         ## data storage
         self.record_datastrg = {
             'acc'   : zeros((3,n)),
-            'accimu': zeros((3,n)),
             'vel'   : zeros((3,n)),
-            'velimu': zeros((3,n)),
             'pos'   : zeros((3,n)),
-            'posimu': zeros((3,n)),
             'acccmd': zeros((3,n)),
             'att'   : zeros((3,n)),
-            'attimu': zeros((3,n)),
-            'cmd'   : zeros((4,n))
+            'cmd'   : zeros((4,n)),
+            'thrust': zeros((1,n))
         }
         ## realtime data
         self.realtime_data = {
             'acc'   : cf.acc,
-            'accimu': cf.acc_imu,
             'vel'   : cf.posvel[3:],
-            'velimu': cf.posvel_imu[3:],
             'pos'   : cf.posvel[:3],
-            'posimu': cf.posvel_imu[:3],
             'acccmd': cf.command,
             'att'   : cf.euler_pos,
-            'attimu': cf.euler_pos_imu,
-            'cmd'   : commander.command
+            'cmd'   : commander.command,
+            'thrust': commander.thrust
         }
 
     
@@ -68,7 +61,7 @@ class Recorder(Thread):
 
         while self.recording:
 
-            self.record_datastrg['acccmd'][:,self.record_length] = self.cf.rot.T @ self.realtime_data['acccmd']
+            self.record_datastrg['acc'][:,self.record_length] = self.cf.rot @ self.realtime_data['acc']
 
             for key, callback in self.record_callback.items():
 
@@ -94,19 +87,16 @@ class Recorder(Thread):
         _len = self.record_length
 
         acc    = self.record_datastrg['acc']
-        accimu = self.record_datastrg['accimu']
         vel    = self.record_datastrg['vel']
-        velimu = self.record_datastrg['velimu']
         pos    = self.record_datastrg['pos']
-        posimu = self.record_datastrg['posimu']
         acccmd = self.record_datastrg['acccmd']
         att    = self.record_datastrg['att']
-        attimu = self.record_datastrg['attimu']
-        cmd    = self.record_datastrg['cmd']
+        cmd    = self.record_datastrg['cmd'] * array([1,1,1,alpha])
+        thrust = self.record_datastrg['thrust']
 
-        plot_acc_pos_cmd(acc, accimu, vel, velimu, pos, posimu, acccmd, _len)
-        plot_thrust(cmd[3,:], _len)
-        plot_att(att, attimu, cmd[:3,:], _len)
+        plot_acc_pos_cmd(acc, vel, pos, acccmd, _len)
+        plot_thrust(thrust[0,:], cmd[3,:], _len)
+        plot_att(att, cmd[:3,:], _len)
 
 
 def array_type_data_callback(datastrg, data, i):
@@ -116,4 +106,4 @@ def array_type_data_callback(datastrg, data, i):
 
 def float_type_data_callback(datastrg, data, i):
 
-    datastrg[0,i] = int(data)
+    datastrg[0,i] = data
