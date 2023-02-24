@@ -14,7 +14,6 @@ from controller import Commander
 from controller import takeoff, hover, landing, goto
 
 from recorder import Recorder
-from recorder import plot_acc_pos_cmd, plot_thrust, plot_vel, plot_att
 
 from admm_gpu_main import guidance_gpu_2
 
@@ -53,7 +52,7 @@ def test_flight_seq2(scf):
 
     hover(scf, commander, T=3)
 
-    # goto(scf, array([1,1,1.5]), commander)
+    goto(scf, array([1,1,1.5]), commander)
 
     landing(scf, commander)
 
@@ -64,7 +63,6 @@ def test_flight_seq2(scf):
     sleep(1)
 
     recorder.join()
-
 
 
 
@@ -84,28 +82,28 @@ if __name__ == "__main__":
 
         # test_flight_seq1(scf)
 
-        test_flight_seq2(scf)
+        # test_flight_seq2(scf)
 
-        # commander = Commander(scf, dt=0.1)
+        commander = Commander(scf, dt=0.1)
 
-        # commander.daemon = True
+        commander.daemon = True
 
-        # recorder = Recorder(scf, commander)
+        recorder = Recorder(scf, commander)
         
-        # recorder.daemon = True
+        recorder.daemon = True
 
-        # commander.start()
+        commander.start()
 
-        # recorder.start()
+        recorder.start()
 
-        # guidance_gpu_2(scf, scf.cf, commander)
+        guidance_gpu_2(scf, scf.cf, commander)
 
-        # commander.join()
+        commander.join()
 
-        # sleep(1)
+        sleep(1)
         
-        # recorder.stop_record()
+        recorder.stop_record()
 
-        # recorder.join()
+        recorder.join()
 
     qtm_wrapper.close()

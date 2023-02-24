@@ -111,12 +111,12 @@ class Commander(Thread):
             thrust = _thrust_clip( self.thrust )
 
             ## input
-            commander.send_setpoint(
-                command[0],         ## roll
-                command[1],         ## pitch
-                command[2],         ## yawRate
-                thrust              ## thrust
-            )
+            # commander.send_setpoint(
+            #     command[0],         ## roll
+            #     command[1],         ## pitch
+            #     command[2],         ## yawRate
+            #     thrust              ## thrust
+            # )
 
             sleep(dt)
 

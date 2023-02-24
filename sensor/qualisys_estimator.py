@@ -139,13 +139,15 @@ class SendPose:
         dt    = cur_t - pre_t
         cls.pre_t = cur_t
 
-        cf.posvel[3] = (x - cf.posvel[0]) / dt
-        cf.posvel[4] = (y - cf.posvel[1]) / dt
-        cf.posvel[5] = (z - cf.posvel[2]) / dt
+        cf.posvel_imu[3] = (x - cf.posvel[0]) / dt
+        cf.posvel_imu[4] = (y - cf.posvel[1]) / dt
+        cf.posvel_imu[5] = (z - cf.posvel[2]) / dt
 
         cf.posvel[0] = x 
         cf.posvel[1] = y 
         cf.posvel[2] = z
+
+        cf.extpos.send_extpos(x, y, z)
 
         cf.euler_pos[0] = R
         cf.euler_pos[1] = P
@@ -161,13 +163,15 @@ class SendPose:
         dt    = cur_t - pre_t
         cls.pre_t = cur_t
 
-        cf.posvel[3] = (x - cf.posvel[0]) / dt
-        cf.posvel[4] = (y - cf.posvel[1]) / dt
-        cf.posvel[5] = (z - cf.posvel[2]) / dt
+        cf.posvel_imu[3] = (x - cf.posvel[0]) / dt
+        cf.posvel_imu[4] = (y - cf.posvel[1]) / dt
+        cf.posvel_imu[5] = (z - cf.posvel[2]) / dt
 
         cf.posvel[0] = x 
         cf.posvel[1] = y 
         cf.posvel[2] = z
+
+        cf.extpos.send_extpos(x, y, z)
 
         cf.euler_pos[0] = R
         cf.euler_pos[1] = P

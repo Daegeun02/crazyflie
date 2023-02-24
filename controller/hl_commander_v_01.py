@@ -90,7 +90,7 @@ def goto(scf, des, commander, T=3, dt=0.1):
     cur = array(posvel[:3])
 
     for k in range(n):
-        pos_cmd = smooth_command(des, cur, T[k], 2.5)
+        pos_cmd = smooth_command(des, cur, T[k], 2)
         P_pos = pos_cmd - posvel[:3]
         D_pos = posvel[3:]
 

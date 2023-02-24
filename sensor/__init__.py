@@ -1,5 +1,5 @@
 ## sensor package
-from numpy import zeros, eye
+from numpy import zeros, eye, ones
 
 from .sensor_setup           import *
 from .imu                    import IMU
@@ -18,6 +18,7 @@ def setup(cf):
     cf.posvel_imu = zeros(6)
 
     cf.acc = zeros(3)
+    cf.acc_imu = ones(3)
 
     cf.command = zeros(3)
 

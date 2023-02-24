@@ -14,6 +14,8 @@ from .hl_commander_v_01 import takeoff, landing, hover, goto
 # from .hl_commander_v_01 import landing as landing_v_01
 # from .hl_commander_v_01 import hover   as hover_v_01
 
+from .landing_supporter import landing_supporter
+
 
 ## optimus prime
 """

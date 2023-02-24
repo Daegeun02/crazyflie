@@ -38,6 +38,9 @@ class IMU:
         log_conf.add_variable('acc.x', 'FP16')      ## m/s^2
         log_conf.add_variable('acc.y', 'FP16')      ## m/s^2
         log_conf.add_variable('acc.z', 'FP16')      ## m/s^2
+        # log_conf.add_variable('stateEstimate.ax', 'FP16')
+        # log_conf.add_variable('stateEstimate.ay', 'FP16')
+        # log_conf.add_variable('stateEstimate.az', 'FP16')
 
         self.scf.cf.log.add_config(log_conf)
         log_conf.data_received_cb.add_callback(self.accelerate_callback)
@@ -63,15 +66,18 @@ class IMU:
 
         
     def velocity_callback(self, timestamp, data, logconf):
-        self.cf.posvel_imu[3] = data['stateEstimate.vx']
-        self.cf.posvel_imu[4] = data['stateEstimate.vy']
-        self.cf.posvel_imu[5] = data['stateEstimate.vz']
+        self.cf.posvel[3] = data['stateEstimate.vx']
+        self.cf.posvel[4] = data['stateEstimate.vy']
+        self.cf.posvel[5] = data['stateEstimate.vz']
 
 
     def accelerate_callback(self, timestamp, data, logconf):
         self.cf.acc[0] = data['acc.x'] * 9.81
         self.cf.acc[1] = data['acc.y'] * 9.81
         self.cf.acc[2] = data['acc.z'] * 9.81
+        # self.cf.acc_imu[0] = data['stateEstimate.ax'] * 9.81
+        # self.cf.acc_imu[1] = data['stateEstimate.ay'] * 9.81
+        # self.cf.acc_imu[2] = data['stateEstimate.az'] * 9.81 + 9.81
 
     
     def eulervel_callback(self, timestamp, data, logconf):

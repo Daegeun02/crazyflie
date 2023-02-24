@@ -5,6 +5,7 @@ import numpy.linalg as lg
 import class_gpu
 
 from controller import takeoff, hover
+from controller import landing_supporter
 
 import time
 
@@ -61,6 +62,8 @@ def guidance_gpu_2(scf, cf, commander):
         n_rt = n_rt - 1
         del optimizer_gpu
         mempool.free_all_blocks() 
+
+    landing_supporter(cf, commander)
 
     commander.stop_send_setpoint()
 

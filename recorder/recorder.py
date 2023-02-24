@@ -18,16 +18,18 @@ class Recorder(Thread):
         self.record_length = 0
         self.recording     = True
 
-        cf = scf.cf
+        cf      = scf.cf
+        self.cf = scf.cf
 
         ## callback functions
         self.record_callback = {
             'acc'   : array_type_data_callback,
+            'accimu': array_type_data_callback,
             'vel'   : array_type_data_callback,
             'velimu': array_type_data_callback,
             'pos'   : array_type_data_callback,
             'posimu': array_type_data_callback,
-            'acccmd': array_type_data_callback,
+            # 'acccmd': array_type_data_callback,
             'att'   : array_type_data_callback,
             'attimu': array_type_data_callback,
             'cmd'   : array_type_data_callback
@@ -35,6 +37,7 @@ class Recorder(Thread):
         ## data storage
         self.record_datastrg = {
             'acc'   : zeros((3,n)),
+            'accimu': zeros((3,n)),
             'vel'   : zeros((3,n)),
             'velimu': zeros((3,n)),
             'pos'   : zeros((3,n)),
@@ -47,6 +50,7 @@ class Recorder(Thread):
         ## realtime data
         self.realtime_data = {
             'acc'   : cf.acc,
+            'accimu': cf.acc_imu,
             'vel'   : cf.posvel[3:],
             'velimu': cf.posvel_imu[3:],
             'pos'   : cf.posvel[:3],
@@ -63,6 +67,8 @@ class Recorder(Thread):
         sleep(0.1)
 
         while self.recording:
+
+            self.record_datastrg['acccmd'][:,self.record_length] = self.cf.rot.T @ self.realtime_data['acccmd']
 
             for key, callback in self.record_callback.items():
 
@@ -88,6 +94,7 @@ class Recorder(Thread):
         _len = self.record_length
 
         acc    = self.record_datastrg['acc']
+        accimu = self.record_datastrg['accimu']
         vel    = self.record_datastrg['vel']
         velimu = self.record_datastrg['velimu']
         pos    = self.record_datastrg['pos']
@@ -97,7 +104,7 @@ class Recorder(Thread):
         attimu = self.record_datastrg['attimu']
         cmd    = self.record_datastrg['cmd']
 
-        plot_acc_pos_cmd(acc, vel, velimu, pos, posimu, acccmd, _len)
+        plot_acc_pos_cmd(acc, accimu, vel, velimu, pos, posimu, acccmd, _len)
         plot_thrust(cmd[3,:], _len)
         plot_att(att, attimu, cmd[:3,:], _len)
 
