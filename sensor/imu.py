@@ -10,6 +10,17 @@ class IMU:
         self.scf = scf
         self.cf  = scf.cf
 
+    
+    def start_get_pos(self, period_in_ms=period_in_ms):
+        log_conf = LogConfig(name='position', period_in_ms=period_in_ms)
+        log_conf.add_variable('kalman.stateX', 'FP16')
+        log_conf.add_variable('kalman.stateY', 'FP16')
+        log_conf.add_variable('kalman.stateZ', 'FP16')
+
+        self.scf.cf.log.add_config(log_conf)
+        log_conf.data_received_cb.add_callback(self.position_callback)
+        log_conf.start()
+
 
     def start_get_vel(self, period_in_ms=period_in_ms):
         log_conf = LogConfig(name="velocity", period_in_ms=period_in_ms)
@@ -45,10 +56,16 @@ class IMU:
 
     
     ### callbacks ### 
+    def position_callback(self, timestamp, data, logconf):
+        self.cf.posvel_imu[0] = data['kalman.stateX']
+        self.cf.posvel_imu[1] = data['kalman.stateY']
+        self.cf.posvel_imu[2] = data['kalman.stateZ']
+
+        
     def velocity_callback(self, timestamp, data, logconf):
-        self.cf.vel[0] = data['stateEstimate.vx']
-        self.cf.vel[1] = data['stateEstimate.vy']
-        self.cf.vel[2] = data['stateEstimate.vz']
+        self.cf.posvel_imu[3] = data['stateEstimate.vx']
+        self.cf.posvel_imu[4] = data['stateEstimate.vy']
+        self.cf.posvel_imu[5] = data['stateEstimate.vz']
 
 
     def accelerate_callback(self, timestamp, data, logconf):
@@ -58,10 +75,6 @@ class IMU:
 
     
     def eulervel_callback(self, timestamp, data, logconf):
-        # self.cf.euler_vel[0] = data['gyro.x']
-        # self.cf.euler_vel[1] = data['gyro.y']
-        # self.cf.euler_vel[2] = data['gyro.z']
-
         self.cf.euler_pos_imu[0] = data['stateEstimate.roll']
         self.cf.euler_pos_imu[1] = data['stateEstimate.pitch']
         self.cf.euler_pos_imu[2] = data['stateEstimate.yaw']

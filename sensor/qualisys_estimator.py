@@ -131,6 +131,7 @@ class SendPose:
                 cf, pose[0], pose[1], pose[2], pose[3], pose[4], pose[5], pose[6]
             )
 
+
     @classmethod
     def send_pose(cls, cf, x, y, z, R, P, Y, rot):
         pre_t = cls.pre_t
@@ -145,14 +146,6 @@ class SendPose:
         cf.posvel[0] = x 
         cf.posvel[1] = y 
         cf.posvel[2] = z
-        
-        # cf.vel[0] = (x - cf.pos[0]) / dt
-        # cf.vel[1] = (y - cf.pos[1]) / dt
-        # cf.vel[2] = (z - cf.pos[2]) / dt
-
-        # cf.pos[0] = x
-        # cf.pos[1] = y
-        # cf.pos[2] = z
 
         cf.euler_pos[0] = R
         cf.euler_pos[1] = P
@@ -160,20 +153,13 @@ class SendPose:
 
         cf.rot = array(rot)
     
+    
     @classmethod
     def send_pos(cls, cf, x, y, z, R, P, Y):
         pre_t = cls.pre_t
         cur_t = time()
         dt    = cur_t - pre_t
         cls.pre_t = cur_t
-        
-        # cf.vel[0] = (x - cf.pos[0]) / dt
-        # cf.vel[1] = (y - cf.pos[1]) / dt
-        # cf.vel[2] = (z - cf.pos[2]) / dt
-
-        # cf.pos[0] = x
-        # cf.pos[1] = y
-        # cf.pos[2] = z
 
         cf.posvel[3] = (x - cf.posvel[0]) / dt
         cf.posvel[4] = (y - cf.posvel[1]) / dt

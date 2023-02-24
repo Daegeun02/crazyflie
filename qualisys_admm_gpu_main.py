@@ -101,10 +101,12 @@ figure8 = [
     [1.053185, -0.398611, 0.850510, -0.144007, -0.485368, -0.079781, 0.176330, 0.234482, -0.153567, 0.447039, -0.532729, -0.855023, 0.878509, 0.775168, -0.391051, -0.713519, 0.391628, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000],  # noqa
 ]
 
-global pos_cb , vel_cb, euler_cb, angvel_cb
+global pos_cb , vel_cb, euler_cb, angvel_cb, pos_qt, vel_qt
 global spec_time, t_gui_st, t_gui_end, const_thrust
 pos_cb = [0,0,0]
 vel_cb = [0,0,0]
+pos_qt = [0,0,0]
+vel_qt = [0,0,0]
 euler_cb = [0,0,0]
 angvel_cb = [0,0,0]
 spec_time = []
@@ -186,6 +188,10 @@ class QtmWrapper(Thread):
                 [r[1], r[4], r[7]],
                 [r[2], r[5], r[8]],
             ]
+
+            pos_qt[0] = x
+            pos_qt[1] = y
+            pos_qt[2] = z
 
             if self.on_pose:
                 # Make sure we got a position

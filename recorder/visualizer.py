@@ -2,40 +2,61 @@ import matplotlib.pyplot as plt
 
 
 
-def plot_acc_pos_cmd(acc, pos, cmd, _len):
+def plot_acc_pos_cmd(acc, vel, velimu, pos, posimu, acccmd, _len):
 
-    plt.figure(figsize=(14,7))
+    plt.figure(figsize=(14,14))
 
-    plt.subplot(231)
+    plt.subplot(331)
     plt.plot(acc[0,:_len], label='realtime acceleration x')
-    plt.plot(cmd[0,:_len], label='command input x')
+    plt.plot(acccmd[0,:_len], label='command input x')
     plt.legend()
     plt.grid()
 
-    plt.subplot(232)
+    plt.subplot(332)
     plt.plot(acc[1,:_len], label='realtime acceleration y')
-    plt.plot(cmd[1,:_len], label='command input y')
+    plt.plot(acccmd[1,:_len], label='command input y')
     plt.legend()
     plt.grid()
 
-    plt.subplot(233)
+    plt.subplot(333)
     plt.plot(acc[2,:_len], label='realtime acceleration z')
-    plt.plot(cmd[2,:_len], label='command input z')
+    plt.plot(acccmd[2,:_len], label='command input z')
     plt.legend()
     plt.grid()
 
-    plt.subplot(234)
+    plt.subplot(334)
+    plt.plot(vel[0,:_len], label='realtime velocity x')
+    plt.plot(velimu[0,:_len], label='realtime velocity from imu x')
+    plt.legend()
+    plt.grid()
+
+    plt.subplot(335)
+    plt.plot(vel[1,:_len], label='realtime velocity y')
+    plt.plot(velimu[1,:_len], label='realtime velocity from imu y')
+    plt.legend()
+    plt.grid()
+
+    plt.subplot(336)
+    plt.plot(vel[2,:_len], label='realtime velocity z')
+    plt.plot(velimu[2,:_len], label='realtime velocity from imu z')
+    plt.legend()
+    plt.grid()
+
+    plt.subplot(337)
     plt.plot(pos[0,:_len], label='realtime position x')
+    plt.plot(posimu[0,:_len], label='realtime position from imu x')
     plt.legend()
     plt.grid()
 
-    plt.subplot(235)
+    plt.subplot(338)
     plt.plot(pos[1,:_len], label='realtime position y')
+    plt.plot(posimu[1,:_len], label='realtime position from imu y')
     plt.legend()
     plt.grid()
 
-    plt.subplot(236)
+    plt.subplot(339)
     plt.plot(pos[2,:_len], label='realtime position z')
+    plt.plot(posimu[2,:_len], label='realtime position from imu z')
     plt.legend()
     plt.grid()
 

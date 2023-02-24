@@ -53,7 +53,7 @@ def test_flight_seq2(scf):
 
     hover(scf, commander, T=3)
 
-    goto(scf, array([1,1,1.5]), commander)
+    # goto(scf, array([1,1,1.5]), commander)
 
     landing(scf, commander)
 

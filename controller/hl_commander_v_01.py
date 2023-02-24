@@ -3,6 +3,8 @@
 
 from .acc_att_controller import smooth_command
 
+from .landing_supporter import landing_supporter
+
 from numpy        import array, arange
 from numpy.linalg import norm
 
@@ -130,10 +132,11 @@ def landing(scf, commander, T=3, dt=0.1):
 
         cf.command[:] = acc_cmd
 
-        if norm(posvel[:3] - des) < 0.05:
-            print('fine landing')
+        if norm(posvel[:3] - des) < 0.20:
             break
 
         sleep(0.1)
+
+    landing_supporter(cf, commander)
 
     commander.stop_send_setpoint()
