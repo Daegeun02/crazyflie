@@ -21,7 +21,7 @@ def guidance_gpu_2(scf, cf, commander):
     n = 40  #0~1000
     # x_0 = np.array([0,0,0,0,0,0])
     # x_des =np.array([1.5,0,1.5,0,0,0]) 
-    x_des = np.array([0,0,0,0,0,0])
+    x_des = np.array([0,0,0.3,0,0,0])
     u_ub = 10
     n_rt = n
     optimizer_gpu = class_gpu.ADMM_optimizer_gpu(np.array(x_0_rt), x_des, n_rt*dt, u_ub, n_rt, 0.01, 0.01, 0.01, 0.01, 1500, 3*n_rt)
@@ -31,19 +31,19 @@ def guidance_gpu_2(scf, cf, commander):
 
     takeoff(scf, commander)
 
-    hover(scf, commander, T=3)
+    hover(scf, commander, T=5)
 
-    goto(scf, array([1,1,1.5]), commander)
+    goto(scf, array([-1.5,3.0,2.0]), commander)
 
-    hover(scf, commander, T=2)
+    hover(scf, commander, T=5)
 
     # dt = 0.25
     # n = 40  #0~1000
     dt = 0.1
-    n = 100
+    n = 70
     # x_0 = np.array([0,0,0,0,0,0])
     # x_des =np.array([1.5,0,1.5,0,0,0]) 
-    u_ub = 10
+    u_ub = 15
     n_rt = n
 
     print('start')
@@ -61,7 +61,7 @@ def guidance_gpu_2(scf, cf, commander):
         if i > n-4:
             print('break 1')
             break
-        if x_0_rt[2] <= 0.1:
+        if x_0_rt[2] <= 0.3:
             print('break 2')
             break
 

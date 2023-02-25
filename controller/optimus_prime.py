@@ -103,6 +103,7 @@ if __name__ == "__main__":
     from numpy import random
 
     acc = random.rand(3) * 10
+    acc = array([-0.1,0,10])
     cmd = array([0,0,0,0], dtype=float64)
 
     _command_as_RPY( acc, cmd )
