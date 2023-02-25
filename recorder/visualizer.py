@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 
 
-def plot_acc_pos_cmd(acc, acccmd, vel, velest, pos, posest, _len):
+def plot_acc_pos_cmd(acc, acccmd, vel, velest, pos, posest, posref, _len):
 
     plt.figure(figsize=(14,14))
 
@@ -46,18 +46,21 @@ def plot_acc_pos_cmd(acc, acccmd, vel, velest, pos, posest, _len):
     plt.subplot(337)
     plt.plot(pos[0,:_len], label='realtime position x')
     plt.plot(posest[0,:_len], label='estimated position x')
+    plt.plot(posref[0,:_len], label='destination position x')
     plt.legend()
     plt.grid()
 
     plt.subplot(338)
     plt.plot(pos[1,:_len], label='realtime position y')
     plt.plot(posest[1,:_len], label='estimated position y')
+    plt.plot(posref[1,:_len], label='destination position y')
     plt.legend()
     plt.grid()
 
     plt.subplot(339)
     plt.plot(pos[2,:_len], label='realtime position z')
     plt.plot(posest[2,:_len], label='estimated position z')
+    plt.plot(posref[2,:_len], label='destination position z')
     plt.legend()
     plt.grid()
 

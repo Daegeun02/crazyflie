@@ -17,8 +17,8 @@ def _command_is_not_in_there( euler, acc_cmd ):
     cy, sy = cos(yaw), sin(yaw)
 
     ## update
-    aE = cy * acc_cmd[0] - sy * acc_cmd[1]
-    aN = cy * acc_cmd[1] + sy * acc_cmd[0]
+    aE = cy * acc_cmd[0] + sy * acc_cmd[1]
+    aN = cy * acc_cmd[1] - sy * acc_cmd[0]
 
     ## store
     acc_cmd[0] = aE

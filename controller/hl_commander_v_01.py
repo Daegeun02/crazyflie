@@ -11,7 +11,7 @@ from numpy.linalg import norm
 from time import sleep
 
 Kp = array([4.000,4.000,2.000])
-Kd = array([2.800,2.800,2.100])
+Kd = array([2.700,2.700,2.100])
 
 
 
@@ -31,9 +31,11 @@ def takeoff(scf, commander, T=3, dt=0.1):
     cur = array(posvel[:3])
     des = array([cur[0],cur[1],1.5])
 
+    cf.destination[:] = des
+
     for k in range(n):
         
-        pos_cmd = smooth_command(des, cur, T[k], 2)
+        pos_cmd = smooth_command(des, cur, T[k], 1)
         P_pos   = pos_cmd - posvel[:3]
         D_pos   = posvel[3:]
 
@@ -61,6 +63,8 @@ def hover(scf, commander, T, dt=0.1):
 
     des = array(posvel[:3])
 
+    cf.destination[:] = des
+
     for _ in range(n):
         P_pos = des - posvel[:3]
         D_pos = posvel[3:]
@@ -76,7 +80,7 @@ def hover(scf, commander, T, dt=0.1):
         sleep(0.1)
 
     
-def goto(scf, des, commander, T=3, dt=0.1):
+def goto(scf, des, commander, T=4, dt=0.1):
 
     print('goto')
 
@@ -88,6 +92,8 @@ def goto(scf, des, commander, T=3, dt=0.1):
     posvel = cf.posvel
 
     cur = array(posvel[:3])
+
+    cf.destination[:] = des
 
     for k in range(n):
         pos_cmd = smooth_command(des, cur, T[k], 2)
@@ -119,8 +125,10 @@ def landing(scf, commander, T=3, dt=0.1):
     cur = array(posvel[:3])
     des = array([cur[0],cur[1],0])
 
+    cf.destination[:] = des
+
     for k in range(n):
-        pos_cmd = smooth_command(des, cur, T[k], 2.5)
+        pos_cmd = smooth_command(des, cur, T[k], T[-1])
         P_pos   = pos_cmd - posvel[:3]
         D_pos   = posvel[3:]
 

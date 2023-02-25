@@ -33,7 +33,7 @@ class Commander(Thread):
         ## time step
         self.dt = dt
 
-        self.thrust = array([alpha * 9.81])
+        self.thrust = array([alpha * 9.81], dtype=int)
         ## memory that restores thrust command
         self.ready_for_command = False
         ## command coord
@@ -112,12 +112,12 @@ class Commander(Thread):
             thrust[0] = _thrust_clip( thrust[0] )
 
             ## input
-            # commander.send_setpoint(
-            #     command[0],         ## roll
-            #     command[1],         ## pitch
-            #     command[2],         ## yawRate
-            #     thrust[0]           ## thrust
-            # )
+            commander.send_setpoint(
+                command[0],         ## roll
+                command[1],         ## pitch
+                command[2],         ## yawRate
+                thrust[0]           ## thrust
+            )
 
             sleep(dt)
 

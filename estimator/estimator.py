@@ -50,7 +50,7 @@ class Estimator(Thread):
 
         A = zeros((6,6))        ## state transition matrix
         B = zeros((6,3))        ## input matrix
-        G = zeros((6,1))        ## gravity matrix
+        G = zeros((6))        ## gravity matrix
 
         A[0,0] = 1
         A[1,1] = 1
@@ -62,14 +62,14 @@ class Estimator(Thread):
         A[1,4] = dt
         A[2,5] = dt
 
-        B[0,0] = dt
-        B[1,1] = dt
-        B[2,2] = dt
-        B[3,0] = 0.5 * dt * dt
-        B[4,1] = 0.5 * dt * dt
-        B[5,2] = 0.5 * dt * dt
+        B[0,0] = 0.5 * dt * dt
+        B[1,1] = 0.5 * dt * dt
+        B[2,2] = 0.5 * dt * dt
+        B[3,0] = dt
+        B[4,1] = dt
+        B[5,2] = dt
 
-        G[2,0] = dt * (-9.81)
-        G[5,0] = 0.5 * dt * dt * (-9.81)
+        G[2] = 0.5 * dt * dt * (-g)
+        G[5] = dt * (-g)
 
         return A, B, G

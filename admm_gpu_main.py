@@ -4,10 +4,12 @@ import numpy.linalg as lg
 
 import class_gpu
 
-from controller import takeoff, hover
+from controller import takeoff, hover, goto
 from controller import landing_supporter
 
 import time
+
+from numpy import array
 
 def guidance_gpu_2(scf, cf, commander):
 
@@ -31,6 +33,10 @@ def guidance_gpu_2(scf, cf, commander):
 
     hover(scf, commander, T=3)
 
+    goto(scf, array([1,1,1.5]), commander)
+
+    hover(scf, commander, T=2)
+
     # dt = 0.25
     # n = 40  #0~1000
     dt = 0.1
@@ -41,6 +47,8 @@ def guidance_gpu_2(scf, cf, commander):
     n_rt = n
 
     print('start')
+
+    cf.destination[:] = x_des[:3]
 
     for i in range(n):
 

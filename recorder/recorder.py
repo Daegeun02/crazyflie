@@ -31,6 +31,7 @@ class Recorder(Thread):
             'velest': array_type_data_callback,
             'pos'   : array_type_data_callback,
             'posest': array_type_data_callback,
+            'posref': array_type_data_callback,
             'att'   : array_type_data_callback,
             'cmd'   : array_type_data_callback,
             'thrust': float_type_data_callback
@@ -43,6 +44,7 @@ class Recorder(Thread):
             'velest': zeros((3,n)),
             'pos'   : zeros((3,n)),
             'posest': zeros((3,n)),
+            'posref': zeros((3,n)),
             'att'   : zeros((3,n)),
             'cmd'   : zeros((4,n)),
             'thrust': zeros((1,n))
@@ -55,6 +57,7 @@ class Recorder(Thread):
             'velest': estimator.posvel[3:],
             'pos'   : cf.posvel[:3],
             'posest': estimator.posvel[:3],
+            'posref': cf.destination,
             'att'   : cf.euler_pos,
             'cmd'   : commander.command,
             'thrust': commander.thrust
@@ -100,13 +103,14 @@ class Recorder(Thread):
 
         pos    = self.record_datastrg['pos']
         posest = self.record_datastrg['posest']
+        posref = self.record_datastrg['posref']
 
         att    = self.record_datastrg['att']
-        cmd    = self.record_datastrg['cmd'] * array([1,1,1,alpha])
+        cmd    = self.record_datastrg['cmd']
         thrust = self.record_datastrg['thrust']
 
-        plot_acc_pos_cmd(acc, acccmd, vel, velest, pos, posest, _len)
-        plot_thrust(thrust[0,:], cmd[3,:], _len)
+        plot_acc_pos_cmd(acc, acccmd, vel, velest, pos, posest, posref, _len)
+        plot_thrust(thrust[0,:], cmd[3,:]*alpha, _len)
         plot_att(att, cmd[:3,:], _len)
 
 
