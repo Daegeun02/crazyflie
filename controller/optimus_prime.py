@@ -1,8 +1,6 @@
 from numpy        import arcsin, rad2deg
 from numpy        import sqrt
 from numpy        import cos, sin, deg2rad
-from numpy import arctan2
-from math import degrees
 
 from numpy.linalg import norm
 
@@ -62,8 +60,6 @@ def _command_as_RPY( acc_cmd, command ):
     else:
         roll_in_rad = 0
     command[0] = rad2deg( roll_in_rad )             ## [deg]
-    # command[0] = -degrees(arctan2(aN, aU))
-    # command[1] = degrees(arctan2(aE, aU))
 
     ## acc strength
     command[3] = norm(acc_cmd)                           ## m/s^2

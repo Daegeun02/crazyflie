@@ -25,6 +25,6 @@ from .optimus_prime import _command_as_ENU, _command_as_RPY
 
 
 ## acc_att_controller
-from .acc_att_controller import _dot_thrust 
-from .acc_att_controller import _thrust_clip
-from .acc_att_controller import alpha, Kp
+from .integral_loop import _dot_thrust 
+from .integral_loop import _thrust_clip
+from .integral_loop import alpha, Kp

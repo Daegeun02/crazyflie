@@ -8,8 +8,8 @@ from numpy.linalg import norm
 
 
 ## control loop
-from ..controller.acc_att_controller import _dot_thrust
-from ..controller.acc_att_controller import _thrust_clip, alpha
+from ..controller.integral_loop import _dot_thrust
+from ..controller.integral_loop import _thrust_clip, alpha
 
 
 ## transformer

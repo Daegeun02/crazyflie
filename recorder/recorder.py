@@ -93,17 +93,15 @@ class Recorder(Thread):
         acccmd = self.record_datastrg['acccmd']
 
         vel    = self.record_datastrg['vel']
-        velest = self.record_datastrg['velest']
 
         pos    = self.record_datastrg['pos']
-        posest = self.record_datastrg['posest']
         posref = self.record_datastrg['posref']
 
         att    = self.record_datastrg['att']
         cmd    = self.record_datastrg['cmd']
         thrust = self.record_datastrg['thrust']
 
-        plot_acc_pos_cmd(acc, acccmd, vel, velest, pos, posest, posref, _len)
+        plot_acc_pos_cmd(acc, acccmd, vel, pos, posref, _len)
         plot_thrust(thrust[0,:], cmd[3,:]*alpha, _len)
         plot_att(att, cmd[:3,:], _len)
 

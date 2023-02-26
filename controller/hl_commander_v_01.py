@@ -1,7 +1,7 @@
 ## high level commander
 ## support takeoff, hover, landing automatically and so on
 
-from .acc_att_controller import smooth_command
+from .integral_loop import smooth_command
 
 from .landing_supporter import landing_supporter
 

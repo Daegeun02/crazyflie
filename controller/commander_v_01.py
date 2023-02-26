@@ -11,8 +11,8 @@ from numpy import array, zeros
 
 
 ## control loop
-from .acc_att_controller import _dot_thrust
-from .acc_att_controller import _thrust_clip, alpha
+from .integral_loop import _dot_thrust
+from .integral_loop import _thrust_clip, alpha
 
 
 ## transformer

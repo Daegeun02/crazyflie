@@ -5,13 +5,8 @@ from numpy import zeros, array
 from time import sleep
 
 Kp = array([4.000,4.000,2.000])
-Kd = array([2.700,2.700,2.100])
+Kd = array([3.200,3.200,2.400])
 
-
-
-class LandingSupporter:
-
-    pass
 
 
 def landing_supporter(cf, commander, dt=0.1, step=0.075):
