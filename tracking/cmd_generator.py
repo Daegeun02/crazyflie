@@ -27,7 +27,7 @@ D_pos  = zeros(3)
 careg  = array([0,0,g])
 
 
-def generate_acccmd(cf, des, dt=0.1, g=g):
+def generate_acccmd(cf, des, dt=0.1):
 
     posvel[:] = cf.posvel
 
