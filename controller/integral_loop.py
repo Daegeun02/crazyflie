@@ -1,14 +1,14 @@
 from numpy.linalg import norm
 
-from constants import load_constant
+from constants import read_constant
 
-_const = load_constant('thrust')
+_const = read_constant('thrust')
 ## thrust factor constant
 alpha  = _const["alpha"]
 ## P loop constant
 Kp     = _const["Kp"]
 
-_const = load_constant('gravity')
+_const = read_constant('gravity')
 ## gravity constant
 g      = _const["g"]
 

@@ -2,7 +2,7 @@ from json import load
 
 
 
-def load_constant(keyword : str) -> dict:
+def read_constant(keyword : str) -> dict:
     """
     this function allows you to read constants you want
 
@@ -21,3 +21,9 @@ def load_constant(keyword : str) -> dict:
         constant = load(constants)
 
     return constant
+
+
+def _be_constant(self, name, value):
+
+    if name in self.__dict__:
+        raise Exception("you can not chance const variable")

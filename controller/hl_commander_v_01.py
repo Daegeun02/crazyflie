@@ -10,6 +10,13 @@ from numpy.linalg import norm
 
 from time import sleep
 
+## read constants
+from constants import read_constant
+
+_const = read_constant('gain') 
+Kp     = _const["Kp"]
+Kd     = _const["Kd"]
+
 Kp = array([4.000,4.000,2.000])
 Kd = array([3.200,3.200,2.400])
 
@@ -47,7 +54,7 @@ def takeoff(scf, commander, T=3, dt=0.1):
 
         cf.command[:] = acc_cmd
 
-        sleep(0.1)
+        sleep(dt)
 
     
 def hover(scf, commander, T, dt=0.1):
@@ -80,7 +87,7 @@ def hover(scf, commander, T, dt=0.1):
 
         cf.command[:] = acc_cmd
 
-        sleep(0.1)
+        sleep(dt)
 
     
 def goto(scf, des, commander, T=4, dt=0.1):
@@ -111,7 +118,7 @@ def goto(scf, des, commander, T=4, dt=0.1):
 
         cf.command[:] = acc_cmd
 
-        sleep(0.1)
+        sleep(dt)
 
 
 def landing(scf, commander, T=3, dt=0.1):
@@ -146,7 +153,7 @@ def landing(scf, commander, T=3, dt=0.1):
         if norm(posvel[:3] - des) < 0.20:
             break
 
-        sleep(0.1)
+        sleep(dt)
 
     landing_supporter(cf, commander)
 

@@ -2,7 +2,7 @@ from threading import Thread
 
 from time import sleep
 
-from .cmd_generator import generate_acccmd
+from .cmd_generator import posvel, generate_acccmd
 
 
 
@@ -26,7 +26,7 @@ class Tracker(Thread):
         ## crazyflie
         cf = self.cf
         ## time step
-        dt = self.dt
+        T  = self.dt
 
         print('waiting for trajectory')
 
@@ -37,9 +37,11 @@ class Tracker(Thread):
 
         while self.tracking:
 
+            posvel[:] = cf.posvel
+
             cf.command[:] = generate_acccmd()
 
-            sleep(dt)
+            sleep(T)
 
 
     def upload_traj(self):
