@@ -26,10 +26,8 @@ rigid_body_name = 'cf1'
 def test_flight_seq(scf):
 
     commander = Commander(scf, dt=0.1)              ## define commander object
-    commander.daemon = True                         ## it must stop when guidance is done
 
     recorder = Recorder(scf, commander)  ## record flight data
-    recorder.daemon = True                          ## it must stop when guidance is done
 
     commander.start()                               ## thread start
     recorder.start()                                ## thread start
@@ -42,7 +40,7 @@ def test_flight_seq(scf):
 
     landing(scf, commander)
 
-    recorder.stop_record()
+    recorder.stop_recording()
 
     commander.join()
 
@@ -69,17 +67,15 @@ if __name__ == "__main__":
         # test_flight_seq(scf)
 
         commander = Commander(scf, dt=0.1)
-        commander.daemon = True
 
         recorder = Recorder(scf, commander)
-        recorder.daemon = True
 
         commander.start()
         recorder.start()
 
         guidance_gpu_2(scf, scf.cf, commander)
 
-        recorder.stop_record()
+        recorder.stop_recording()
 
         commander.join()
 

@@ -16,6 +16,7 @@ class Recorder(Thread):
     def __init__(self, scf, commander, n=10000):
         ## for threading
         super().__init__()
+        self.daemon = True
 
         self.record_length = 0
         self.recording     = True
@@ -78,7 +79,7 @@ class Recorder(Thread):
             sleep(0.05)
 
     
-    def stop_record(self):
+    def stop_recording(self):
 
         self.recording = False
 
