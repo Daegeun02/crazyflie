@@ -43,7 +43,7 @@ def takeoff(scf, commander, T=3, dt=0.1):
         acc_cmd = 0
         acc_cmd += P_pos * Kp
         acc_cmd -= D_pos * Kd
-        acc_cmd += [0,0,9.82]
+        acc_cmd += [0,0,9.81]
 
         cf.command[:] = acc_cmd
 
@@ -76,7 +76,7 @@ def hover(scf, commander, T, dt=0.1):
         acc_cmd = 0
         acc_cmd += P_pos * Kp
         acc_cmd -= D_pos * Kd
-        acc_cmd += [0,0,9.82]
+        acc_cmd += [0,0,9.81]
 
         cf.command[:] = acc_cmd
 
@@ -107,7 +107,7 @@ def goto(scf, des, commander, T=4, dt=0.1):
         acc_cmd = 0
         acc_cmd += P_pos * Kp
         acc_cmd -= D_pos * Kd
-        acc_cmd += [0,0,9.82]
+        acc_cmd += [0,0,9.81]
 
         cf.command[:] = acc_cmd
 
@@ -139,7 +139,7 @@ def landing(scf, commander, T=3, dt=0.1):
         acc_cmd = 0
         acc_cmd += P_pos * Kp
         acc_cmd -= D_pos * Kd
-        acc_cmd += [0,0,9.82]
+        acc_cmd += [0,0,9.81]
 
         cf.command[:] = acc_cmd
 

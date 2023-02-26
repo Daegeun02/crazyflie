@@ -3,7 +3,7 @@ from numpy.linalg import norm
 from time import time
 
 ## thrust factor constant
-alpha = (45000/9.82)
+alpha = (45000/9.81)
 ## P loop constant
 Kp = 0.1 
 

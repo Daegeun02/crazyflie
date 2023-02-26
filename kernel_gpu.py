@@ -206,7 +206,7 @@ def ker_make_matrix():
         }
 
         float b[6] = {0, 0, 0, 0, 0, 0};
-        float g = -9.82;
+        float g = -9.81;
 
         //b[2] = 0.5*g*pow(dt,2);
         b[2] = 0.5*g*dt*dt;

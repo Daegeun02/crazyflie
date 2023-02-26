@@ -24,7 +24,7 @@ def landing_supporter(cf, commander, dt=0.1, step=0.075):
 
     command = zeros(3)
 
-    g = 9.82
+    g = 9.81
 
     for _ in range(20):
         P_pos = des - posvel[:3]
