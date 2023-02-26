@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 
 
-def plot_acc_pos_cmd(acc, acccmd, vel, pos, posref, _len):
+def plot_acc_pos_cmd(acc, acccmd, vel, velref, pos, posref, _len):
 
     plt.figure(figsize=(14,14))
 
@@ -27,16 +27,19 @@ def plot_acc_pos_cmd(acc, acccmd, vel, pos, posref, _len):
     ## velocity is reversed
     plt.subplot(334)
     plt.plot(vel[0,:_len], label='realtime velocity x')
+    plt.plot(velref[0,:_len], label='destination velocity x')
     plt.legend()
     plt.grid()
 
     plt.subplot(335)
     plt.plot(vel[1,:_len], label='realtime velocity y')
+    plt.plot(velref[1,:_len], label='destination velocity y')
     plt.legend()
     plt.grid()
 
     plt.subplot(336)
     plt.plot(vel[2,:_len], label='realtime velocity z')
+    plt.plot(velref[2,:_len], label='destination velocity z')
     plt.legend()
     plt.grid()
 

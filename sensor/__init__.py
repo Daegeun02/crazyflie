@@ -21,7 +21,7 @@ def setup(cf):
 
     cf.command = zeros(3)
 
-    cf.destination = zeros(3)
+    cf.destination = zeros(6)
 
     cf.rot = eye(3)
 

@@ -2,7 +2,7 @@ from threading import Thread
 
 from time import sleep
 
-from .cmd_generator import posvel, generate_acccmd
+from .cmd_generator import acccmd, generate_acccmd
 
 
 
@@ -19,6 +19,9 @@ class Tracker(Thread):
         ## time step
         self.dt = dt
 
+        ## trajectory
+        self.traj = None
+
         self.tracking = False
 
     
@@ -27,6 +30,9 @@ class Tracker(Thread):
         cf = self.cf
         ## time step
         T  = self.dt
+
+        ## trajectory
+        traj = self.traj
 
         print('waiting for trajectory')
 
@@ -37,9 +43,9 @@ class Tracker(Thread):
 
         while self.tracking:
 
-            posvel[:] = cf.posvel
+            generate_acccmd(cf, traj, dt=T)
 
-            cf.command[:] = generate_acccmd()
+            cf.command[:] = acccmd
 
             sleep(T)
 

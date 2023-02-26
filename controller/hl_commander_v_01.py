@@ -38,7 +38,7 @@ def takeoff(scf, commander, T=3, dt=0.1):
     cur = array(posvel[:3])
     des = array([cur[0],cur[1],1.5])
 
-    cf.destination[:] = des
+    cf.destination[:3] = des
 
     for k in range(n):
         
@@ -71,7 +71,7 @@ def hover(scf, commander, T, dt=0.1):
 
     des = array(posvel[:3])
 
-    cf.destination[:] = des
+    cf.destination[:3] = des
 
     for _ in range(n):
         P_pos = des - posvel[:3]
@@ -103,7 +103,7 @@ def goto(scf, des, commander, T=4, dt=0.1):
 
     cur = array(posvel[:3])
 
-    cf.destination[:] = des
+    cf.destination[:3] = des
 
     for k in range(n):
         pos_cmd = smooth_command(des, cur, T[k], 2)
@@ -135,7 +135,7 @@ def landing(scf, commander, T=3, dt=0.1):
     cur = array(posvel[:3])
     des = array([cur[0],cur[1],0])
 
-    cf.destination[:] = des
+    cf.destination[:3] = des
 
     for k in range(n):
         pos_cmd = smooth_command(des, cur, T[k], T[-1])

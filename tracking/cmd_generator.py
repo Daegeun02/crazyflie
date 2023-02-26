@@ -12,25 +12,33 @@ _const = read_constant('gain')
 Kp     = _const["Kp"]
 Kd     = _const["Kd"]
 
+_const = read_constant('gravity')
+g      = _const["g"]
+
 print(Kp)
 print(Kd)
 
 
 ## extern variable
 posvel = zeros(6)
-acccmd = zeros(6)
+acccmd = zeros(3)
+P_pos  = zeros(3)
+D_pos  = zeros(3)
+careg  = array([0,0,g])
 
 
-def generate_acccmd(cf, des, T, dt=0.1):
+def generate_acccmd(cf, des, dt=0.1, g=g):
 
-    n = int( T / dt )
+    posvel[:] = cf.posvel
 
     cf.destination[:] = des
 
-    for _ in range(n):
-        P_pos = des[3:] - posvel[:3]
-        D_pos = des[3:] - posvel[3:]
+    P_pos[:] = des[:3] - posvel[:3]
+    D_pos[:] = des[3:] - posvel[3:]
 
-        acccmd[:] = P_pos * Kp + D_pos * Kd + [0,0,9.81]
+    acccmd[:] = 0
+    acccmd[:] += P_pos * Kp
+    acccmd[:] += D_pos * Kd
+    acccmd[:] += careg
 
-        sleep(dt)
+    return acccmd
