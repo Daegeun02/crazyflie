@@ -17,6 +17,9 @@ _const = read_constant('gain')
 Kp     = _const["Kp"]
 Kd     = _const["Kd"]
 
+_const = read_constant('gravity')
+g      = _const["g"]
+
 Kp = array([4.000,4.000,2.000])
 Kd = array([3.200,3.200,2.400])
 
