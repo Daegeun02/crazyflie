@@ -13,7 +13,7 @@ from .visualizer import *
 class Recorder(Thread):
 
 
-    def __init__(self, scf, commander, estimator, n=10000):
+    def __init__(self, scf, commander, n=10000):
         ## for threading
         super().__init__()
 
@@ -28,9 +28,7 @@ class Recorder(Thread):
             # acc'   : array_type_data_callback,
             'acccmd': array_type_data_callback,
             'vel'   : array_type_data_callback,
-            'velest': array_type_data_callback,
             'pos'   : array_type_data_callback,
-            'posest': array_type_data_callback,
             'posref': array_type_data_callback,
             'att'   : array_type_data_callback,
             'cmd'   : array_type_data_callback,
@@ -41,9 +39,7 @@ class Recorder(Thread):
             'acc'   : zeros((3,n)),
             'acccmd': zeros((3,n)),
             'vel'   : zeros((3,n)),
-            'velest': zeros((3,n)),
             'pos'   : zeros((3,n)),
-            'posest': zeros((3,n)),
             'posref': zeros((3,n)),
             'att'   : zeros((3,n)),
             'cmd'   : zeros((4,n)),
@@ -54,9 +50,7 @@ class Recorder(Thread):
             'acc'   : cf.acc,
             'acccmd': cf.command,
             'vel'   : cf.posvel[3:],
-            'velest': estimator.posvel[3:],
             'pos'   : cf.posvel[:3],
-            'posest': estimator.posvel[:3],
             'posref': cf.destination,
             'att'   : cf.euler_pos,
             'cmd'   : commander.command,
