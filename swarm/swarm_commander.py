@@ -36,3 +36,9 @@ class SwarmCommander(Swarm):
             _vel_command_loop,
             args_dict=_swarm_commander(self._cfs)
         )
+
+    
+    def upload_acc_cmd(self, acccmds: dict):
+
+        for uri, scf in self._cfs.items():
+            scf.cf.command[:] = acccmds[uri]
