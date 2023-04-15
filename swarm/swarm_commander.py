@@ -11,7 +11,7 @@ def _swarm_commander(scfs: dict, dt=0.1):
     commanders = {}
 
     for uri, scf in scfs.items():
-        commanders[uri] = Commander(scf.cf, dt)
+        commanders[uri] = scf, Commander(scf.cf, dt)
 
     return commanders
 
