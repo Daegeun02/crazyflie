@@ -47,54 +47,57 @@ def controller( acccmd, descmd, posvel ):
     acccmd[:] += careg
 
 
+def _func( *args ):
+    uri = args[0]
+    scf = args[1]
+    N   = args[2]
+    h   = args[3]
+    T   = args[4]
+    dt  = args[5]
+
+    _cf = scf.cf
+
+    t = 0
+
+    cur    = curs[uri]
+    des    = dess[uri]
+    descmd = descmds[uri]
+    acccmd = acccmds[uri]
+
+    cur[:] = _cf.posvel
+    posvel = _cf.posvel
+
+    ## takeoff straight up
+    des[ 0 ] = cur[0]
+    des[ 1 ] = cur[1]
+    des[ 2 ] = h
+    des[3: ] = 0
+
+    _cf.destination[:] = des
+
+    for _ in range( N ):
+        ## one way to delete overshoot
+        descmd[:] = smooth_command( des, cur, t, int(T/2) )
+
+        controller( acccmd, descmd, posvel )
+
+        _cf.command[:] = acccmd
+
+        t += dt
+
+        sleep( dt )
+
+
 def takeoff( cfs, h=1.5, T=3, dt=0.1 ):
 
     N = int( T / dt )
-
-    def _func( *args ):
-        uri = args[0]
-        scf = args[1]
-        N   = args[2]
-
-        _cf = scf.cf
-
-        t = 0
-
-        cur    = curs[uri]
-        des    = dess[uri]
-        descmd = descmds[uri]
-        acccmd = acccmds[uri]
-
-        cur[:] = _cf.posvel
-        posvel = _cf.posvel
-
-        ## takeoff straight up
-        des[ 0 ] = cur[0]
-        des[ 1 ] = cur[1]
-        des[ 2 ] = h
-        des[3: ] = 0
-
-        _cf.destination[:] = des
-
-        for _ in range( N ):
-            ## one way to delete overshoot
-            descmd[:] = smooth_command( des, cur, t, int(T/2) )
-
-            controller( acccmd, descmd, posvel )
-
-            _cf.command[:] = acccmd
-
-            t += dt
-
-            sleep( dt )
-
 
     func = _func()
 
     threads = []
     
     for uri, scf in cfs.items():
-        args = [ uri, scf, N ]
+        args = [ uri, scf, N, h, T, dt ]
 
         thread = Thread(target=func, args=args)
         threads.append( thread )

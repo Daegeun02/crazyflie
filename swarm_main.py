@@ -1,11 +1,6 @@
 import cflib.crtp
 
-from cflib.crazyflie.swarm import Swarm
-
-from swarm import SwarmCommander
-
-from sensor import start
-from sensor import QtmWrapper
+from swarm import *
 
 from time import sleep
 
@@ -39,20 +34,12 @@ if __name__ == "__main__":
         ## turn on commander
         _swarm.start()
 
-        t  = 0 
-        dt = 0.1
+        init_cfs( _swarm._cfs )
 
-        while t < 20:
+        takeoff( _swarm._cfs )
 
-            for uri, scf in _swarm._cfs.items():
-                cf = scf.cf
-                print( cf.posvel, cf.acc )
-            print('=' * 20)
+        landing( _swarm._cfs )
 
-            t += dt
-
-            sleep( dt )
-        
         _swarm.stop_all()
 
         exit()
