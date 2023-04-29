@@ -21,6 +21,9 @@ from .optimus_prime import _command_is_not_in_there
 
 
 
+zero = zeros( 3 )
+
+
 class Commander(Thread):
     
     
@@ -103,6 +106,10 @@ class Commander(Thread):
         ## transform command
         acc_cmd = _command_is_not_in_there( euler_cur, acc_cmd )
         _command_as_RPY( acc_cmd, command )
+
+        if ( acc_cmd == zero ):
+            sleep( dt )
+            return 
 
         for _ in range(n):
 
