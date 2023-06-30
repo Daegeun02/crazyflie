@@ -125,6 +125,7 @@ class SendPose:
     # cls.pre_t = cur_t
 
 
+
     @classmethod
     def send_extpose(cls, cf, pose):
         if pose[6] is None:
