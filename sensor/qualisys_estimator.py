@@ -124,6 +124,10 @@ class SendPose:
     # dt    = cur_t - pre_t
     # cls.pre_t = cur_t
 
+    @classmethod
+    def transmit_pose( cls, pose ):
+
+        pass
 
 
     @classmethod
